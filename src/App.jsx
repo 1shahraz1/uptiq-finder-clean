@@ -175,7 +175,7 @@ function FinderCard() {
         <div className="flex items-center justify-between gap-4 mb-6">
           <h3 className="text-xl font-semibold">Uptiq Algo Finder</h3>
           <div className="flex-1 h-2 mx-6 rounded-full bg-slate-100">
-            <div className="h-2 rounded-full bg-sky-500" style={{ width: `${progress}%` }} />
+            <div className="h-2 rounded-full bg-black" style={{ width: `${progress}%` }} />
           </div>
           <div className="text-sm tabular-nums text-slate-600">{progress}%</div>
         </div>
@@ -192,7 +192,7 @@ function FinderCard() {
                   <button
                     key={o.v}
                     onClick={() => handleSelect(steps[step].key, o.v, steps[step].multi)}
-                    className={`p-4 text-left rounded-2xl border transition ${selected ? "border-sky-400 bg-sky-50" : "border-slate-200 hover:bg-slate-50"}`}
+                    className={`p-4 text-left rounded-2xl border transition ${selected ? "bg-black bg-black" : "border-slate-200 hover:bg-slate-50"}`}
                   >
                     {o.label}
                   </button>
@@ -211,7 +211,7 @@ function FinderCard() {
               <button
                 onClick={() => setStep((s) => Math.min(steps.length, s + 1))}
                 disabled={!canContinue}
-                className="px-5 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-semibold disabled:opacity-40"
+                className="px-5 py-2 rounded-xl bg-black hover:bg-black text-white font-semibold disabled:opacity-40"
               >
                 Next
               </button>
@@ -241,7 +241,7 @@ function EmailGate({ email, setEmail, onSubmit }) {
           className="flex-1 px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
           required
         />
-        <button className="px-5 py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-semibold">Show My Matches</button>
+        <button className="px-5 py-3 rounded-xl bg-black hover:bg-black text-white font-semibold">Show My Matches</button>
       </form>
       <p className="text-xs text-slate-500 mt-2">We’ll also send setup tips for your match. Unsubscribe anytime.</p>
     </div>
@@ -270,7 +270,7 @@ function ResultPanel({ result, answers }) {
               {item.highlights.map((h, i) => <li key={i}>{h}</li>)}
             </ul>
             <div className="mt-4">
-              <a href="https://uptiq.io/trial" className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-sm font-semibold">Start 7-Day Trial</a>
+              <a href="https://uptiq.io/trial" className="px-4 py-2 rounded-xl bg-black hover:bg-black text-white text-sm font-semibold">Start 7-Day Trial</a>
             </div>
           </div>
         ))}
