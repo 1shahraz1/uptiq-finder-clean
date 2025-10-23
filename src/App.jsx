@@ -65,11 +65,12 @@ function Hero() {
           </div>
           <div className="relative">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-           <div className="aspect-video rounded-2xl border border-slate-200 bg-slate-50 grid place-items-center text-slate-500">
-  <div className="text-center">
-    <div className="text-sm">Live Strategy Dashboard (mockup)</div>
-    <div className="mt-2 text-xs opacity-70">Plug your preferred broker/platform</div>
-  </div>
+          <div className="aspect-video rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm">
+  <img
+    src="/Screenshot%202025-10-09%20130034.png"
+    alt="Uptiq Strategy Dashboard Screenshot"
+    className="w-full h-full object-cover"
+  />
 </div>
               <ul className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-700">
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">MT5 • NinjaTrader • IBKR</li>
