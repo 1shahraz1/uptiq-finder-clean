@@ -37,7 +37,7 @@ function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <a href="#finder" className="text-sm px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50">Try the Finder</a>
-          <a href="https://uptiq.io/trial" className="text-sm px-3 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-semibold">Start Free Trial</a>
+          <a href="https://uptiq.io/trial" className="text-sm px-3 py-2 rounded-xl bg-black hover:hover:bg-neutral-800 text-white font-semibold">Start Free Trial</a>
         </div>
       </div>
     </header>
@@ -50,7 +50,7 @@ function Hero() {
       <div className="max-w-6xl mx-auto px-4 py-16 md:py-20 relative">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <p className="uppercase tracking-wider text-sky-600 text-xs mb-3">Algorithms made simple</p>
+            <p className="uppercase tracking-wider text-black text-xs mb-3">Algorithms made simple</p>
             <h1 className="text-4xl md:text-5xl font-bold leading-tight">
               Pick the right trading algorithm in under a minute
             </h1>
