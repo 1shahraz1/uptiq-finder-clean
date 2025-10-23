@@ -1,3 +1,21 @@
+{steps[step].options.map((o) => {
+  const selected = steps[step].multi
+    ? (answers[steps[step].key] || []).includes(o.v)
+    : answers[steps[step].key] === o.v;
+  return (
+    <button
+      key={o.v}
+      onClick={() => handleSelect(steps[step].key, o.v, steps[step].multi)}
+      className={`p-4 text-left rounded-2xl border font-medium transition ${
+        selected
+          ? "border-black bg-black text-white"
+          : "border-slate-200 bg-white text-black hover:bg-neutral-100"
+      }`}
+    >
+      {o.label}
+    </button>
+  );
+})}
 import React, { useMemo, useState } from "react";
 
 export default function App() {
