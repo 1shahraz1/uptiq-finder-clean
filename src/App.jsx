@@ -184,20 +184,25 @@ function FinderCard() {
           <div>
             <p className="text-lg mb-4">{steps[step].q}</p>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {steps[step].options.map((o) => {
-                const selected = steps[step].multi
-                  ? (answers[steps[step].key] || []).includes(o.v)
-                  : answers[steps[step].key] === o.v;
-                return (
-                  <button
-                    key={o.v}
-                    onClick={() => handleSelect(steps[step].key, o.v, steps[step].multi)}
-                    className={`p-4 text-left rounded-2xl border transition ${selected ? "bg-black bg-black" : "border-slate-200 hover:bg-slate-50"}`}
-                  >
-                    {o.label}
-                  </button>
-                );
-              })}
+             {steps[step].options.map((o) => {
+  const selected = steps[step].multi
+    ? (answers[steps[step].key] || []).includes(o.v)
+    : answers[steps[step].key] === o.v;
+  return (
+    <button
+      key={o.v}
+      onClick={() => handleSelect(steps[step].key, o.v, steps[step].multi)}
+      className={`p-4 text-left rounded-2xl border font-medium transition ${
+        selected
+          ? "border-black bg-black text-white"
+          : "border-slate-200 bg-white text-black hover:bg-neutral-100"
+      }`}
+    >
+      {o.label}
+    </button>
+  );
+})}
+
             </div>
 
             <div className="mt-6 flex items-center justify-between">
