@@ -55,7 +55,7 @@ function Hero() {
               Pick the right trading algorithm in under a minute
             </h1>
             <p className="mt-4 text-slate-600 text-lg">
-              UPTIQ helps you automate entries and exits with transparent, customizable strategies. Take the quiz and get a data-driven match based on your goals, risk, and platform.
+              Uptiq helps you automate entries and exits with transparent, customizable strategies. Take the quiz and get a data-driven match based on your goals, risk, and platform.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a href="#finder" className="px-5 py-3 rounded-2xl bg-black hover:bg-black text-white font-semibold">Match Me</a>
