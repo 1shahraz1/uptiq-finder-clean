@@ -28,7 +28,7 @@ function Header() {
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img src="/logo.png" alt="Uptiq" className="h-8 w-auto hidden sm:block" />
-          <span className="font-semibold tracking-wide">UPTIQ</span>
+          <span className="font-semibold tracking-wide">Uptiq</span>
         </div>
         <nav className="hidden md:flex items-center gap-6 text-sm text-slate-600">
           <a href="#how" className="hover:text-slate-900">How it works</a>
