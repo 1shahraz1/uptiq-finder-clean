@@ -65,12 +65,15 @@ function Hero() {
           </div>
           <div className="relative">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="aspect-video rounded-2xl border border-slate-200 bg-slate-50 grid place-items-center text-slate-500">
-                <div className="text-center">
-                  <div className="text-sm">Live Strategy Dashboard (mockup)</div>
-                  <div className="mt-2 text-xs opacity-70">Plug your preferred broker/platform</div>
-                </div>
-              </div>
+              <div className="aspect-video rounded-2xl overflow-hidden border border-slate-200 bg-black">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/VIDEO_ID?rel=0"
+    title="Uptiq Live Strategy Dashboard"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+    className="w-full h-full"
+  />
+</div>
               <ul className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-700">
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">MT5 • NinjaTrader • IBKR</li>
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">Risk controls built-in</li>
