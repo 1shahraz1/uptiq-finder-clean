@@ -1,21 +1,3 @@
-{steps[step].options.map((o) => {
-  const selected = steps[step].multi
-    ? (answers[steps[step].key] || []).includes(o.v)
-    : answers[steps[step].key] === o.v;
-  return (
-    <button
-      key={o.v}
-      onClick={() => handleSelect(steps[step].key, o.v, steps[step].multi)}
-      className={`p-4 text-left rounded-2xl border font-medium transition ${
-        selected
-          ? "border-black bg-black text-white"
-          : "border-slate-200 bg-white text-black hover:bg-neutral-100"
-      }`}
-    >
-      {o.label}
-    </button>
-  );
-})}
 import React, { useMemo, useState } from "react";
 
 export default function App() {
@@ -55,7 +37,7 @@ function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <a href="#finder" className="text-sm px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50">Try the Finder</a>
-          <a href="https://uptiq.io/trial" className="text-sm px-3 py-2 rounded-xl bg-black hover:hover:bg-neutral-800 text-white font-semibold">Start Free Trial</a>
+          <a href="https://uptiq.io/trial" className="text-sm px-3 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">Start Free Trial</a>
         </div>
       </div>
     </header>
@@ -68,7 +50,7 @@ function Hero() {
       <div className="max-w-6xl mx-auto px-4 py-16 md:py-20 relative">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <p className="uppercase tracking-wider text-black text-xs mb-3">Algorithms made simple</p>
+            <p className="uppercase tracking-wider text-neutral-600 text-xs mb-3">Algorithms made simple</p>
             <h1 className="text-4xl md:text-5xl font-bold leading-tight">
               Pick the right trading algorithm in under a minute
             </h1>
@@ -76,7 +58,7 @@ function Hero() {
               Uptiq helps you automate entries and exits with transparent, customizable strategies. Take the quiz and get a data-driven match based on your goals, risk, and platform.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="#finder" className="px-5 py-3 rounded-2xl bg-black hover:bg-black text-white font-semibold">Match Me</a>
+              <a href="#finder" className="px-5 py-3 rounded-2xl bg-black hover:bg-neutral-800 text-white font-semibold">Match Me</a>
               <a href="#how" className="px-5 py-3 rounded-2xl border border-slate-200 hover:bg-slate-50">How it works</a>
             </div>
             <p className="mt-3 text-xs text-slate-500">7-day free trial • No coding • Cancel anytime</p>
@@ -118,7 +100,7 @@ function TrustBar() {
 function SectionTitle({ eyebrow, title, subtitle }) {
   return (
     <div className="text-center max-w-3xl mx-auto mt-16 mb-8">
-      {eyebrow && <div className="text-sky-600 text-xs uppercase tracking-wider mb-2">{eyebrow}</div>}
+      {eyebrow && <div className="text-neutral-600 text-xs uppercase tracking-wider mb-2">{eyebrow}</div>}
       <h2 className="text-2xl md:text-3xl font-bold">{title}</h2>
       {subtitle && <p className="mt-2 text-slate-600">{subtitle}</p>}
     </div>
@@ -202,25 +184,24 @@ function FinderCard() {
           <div>
             <p className="text-lg mb-4">{steps[step].q}</p>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-             {steps[step].options.map((o) => {
-  const selected = steps[step].multi
-    ? (answers[steps[step].key] || []).includes(o.v)
-    : answers[steps[step].key] === o.v;
-  return (
-    <button
-      key={o.v}
-      onClick={() => handleSelect(steps[step].key, o.v, steps[step].multi)}
-      className={`p-4 text-left rounded-2xl border font-medium transition ${
-        selected
-          ? "border-black bg-black text-white"
-          : "border-slate-200 bg-white text-black hover:bg-neutral-100"
-      }`}
-    >
-      {o.label}
-    </button>
-  );
-})}
-
+              {steps[step].options.map((o) => {
+                const selected = steps[step].multi
+                  ? (answers[steps[step].key] || []).includes(o.v)
+                  : answers[steps[step].key] === o.v;
+                return (
+                  <button
+                    key={o.v}
+                    onClick={() => handleSelect(steps[step].key, o.v, steps[step].multi)}
+                    className={`p-4 text-left rounded-2xl border font-medium transition ${
+                      selected
+                        ? "border-black bg-black text-white"
+                        : "border-slate-200 bg-white text-black hover:bg-neutral-100"
+                    }`}
+                  >
+                    {o.label}
+                  </button>
+                );
+              })}
             </div>
 
             <div className="mt-6 flex items-center justify-between">
@@ -234,7 +215,7 @@ function FinderCard() {
               <button
                 onClick={() => setStep((s) => Math.min(steps.length, s + 1))}
                 disabled={!canContinue}
-                className="px-5 py-2 rounded-xl bg-black hover:bg-black text-white font-semibold disabled:opacity-40"
+                className="px-5 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold disabled:opacity-40"
               >
                 Next
               </button>
@@ -261,10 +242,10 @@ function EmailGate({ email, setEmail, onSubmit }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@company.com"
-          className="flex-1 px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          className="flex-1 px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-neutral-800"
           required
         />
-        <button className="px-5 py-3 rounded-xl bg-black hover:bg-black text-white font-semibold">Show My Matches</button>
+        <button className="px-5 py-3 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">Show My Matches</button>
       </form>
       <p className="text-xs text-slate-500 mt-2">We’ll also send setup tips for your match. Unsubscribe anytime.</p>
     </div>
@@ -283,7 +264,7 @@ function ResultPanel({ result, answers }) {
           <div key={item.key} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sky-700 text-xs uppercase tracking-wide">{item.badge}</div>
+                <div className="text-neutral-700 text-xs uppercase tracking-wide">{item.badge}</div>
                 <div className="text-lg font-semibold">{item.name}</div>
               </div>
               <div className="text-sm text-slate-600">Score {Math.round(item.score)}</div>
@@ -293,7 +274,7 @@ function ResultPanel({ result, answers }) {
               {item.highlights.map((h, i) => <li key={i}>{h}</li>)}
             </ul>
             <div className="mt-4">
-              <a href="https://uptiq.io/trial" className="px-4 py-2 rounded-xl bg-black hover:bg-black text-white text-sm font-semibold">Start 7-Day Trial</a>
+              <a href="https://uptiq.io/trial" className="px-4 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white text-sm font-semibold">Start 7-Day Trial</a>
             </div>
           </div>
         ))}
@@ -317,7 +298,7 @@ function HowItWorks() {
           { t: "Launch with controls", d: "Use presets or fine-tune risk. Alerts-only or full automation — your call." }
         ].map((x, i) => (
           <div key={i} className="rounded-2xl p-5 border border-slate-200 bg-white shadow-sm">
-            <div className="text-sky-700 text-xs uppercase tracking-wider">Step {i + 1}</div>
+            <div className="text-neutral-700 text-xs uppercase tracking-wider">Step {i + 1}</div>
             <div className="mt-1 font-semibold">{x.t}</div>
             <p className="text-slate-600 text-sm mt-2">{x.d}</p>
           </div>
