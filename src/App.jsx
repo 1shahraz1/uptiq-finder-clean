@@ -58,7 +58,7 @@ function Hero() {
               UPTIQ helps you automate entries and exits with transparent, customizable strategies. Take the quiz and get a data-driven match based on your goals, risk, and platform.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="#finder" className="px-5 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-white font-semibold">Match Me</a>
+              <a href="#finder" className="px-5 py-3 rounded-2xl bg-black hover:bg-black text-white font-semibold">Match Me</a>
               <a href="#how" className="px-5 py-3 rounded-2xl border border-slate-200 hover:bg-slate-50">How it works</a>
             </div>
             <p className="mt-3 text-xs text-slate-500">7-day free trial • No coding • Cancel anytime</p>
