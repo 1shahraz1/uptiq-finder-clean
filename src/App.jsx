@@ -55,36 +55,39 @@ function Hero() {
               Pick the right trading algorithm in under a minute
             </h1>
             <p className="mt-4 text-slate-600 text-lg">
-              Uptiq helps you automate entries and exits with transparent, customizable strategies. Take the quiz and get a data-driven match based on your goals, risk, and platform.
+              Uptiq give you the tools you need to identify data driven trades with transparent, customizable strategies. Take the quiz and see what your style of algorithm is based on your goals, risk, and platform.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a href="#finder" className="px-5 py-3 rounded-2xl bg-black hover:bg-neutral-800 text-white font-semibold">Match Me</a>
               <a href="#how" className="px-5 py-3 rounded-2xl border border-slate-200 hover:bg-slate-50">How it works</a>
             </div>
-            <p className="mt-3 text-xs text-slate-500">7-day free trial • No coding • Cancel anytime</p>
+            <p className="mt-3 text-xs text-slate-500">No hidden fees or charges • No coding needed • 30 day money back guarantee</p>
           </div>
+
           <div className="relative">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="aspect-video rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm">
-  <img
-    src="/Screenshot%202025-10-09%20130034.png"
-    alt="Uptiq Strategy Dashboard Screenshot"
-    className="w-full h-full object-cover"
-  />
-</div>
+              <div className="aspect-video rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm">
+                <img
+                  src="/Screenshot%202025-10-09%20130034.png"
+                  alt="Uptiq Strategy Dashboard Screenshot"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <ul className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-700">
-                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">MT5 • NinjaTrader • IBKR</li>
+                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">MetaTrader 5 Strategies</li>
+                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">NinjaTrader + IBKR coming soon</li>
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">Risk controls built-in</li>
-                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">Alerts or full automation</li>
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">Transparent performance</li>
               </ul>
             </div>
           </div>
+
         </div>
       </div>
     </section>
   );
 }
+
 
 function TrustBar() {
   return (
