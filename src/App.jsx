@@ -74,7 +74,7 @@ function Hero() {
               </div>
               <ul className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-700">
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">MetaTrader 5 Strategies</li>
-                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">NinjaTrader + IBKR coming soon</li>
+                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">NinjaTrader + IBKR coming soon!</li>
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">Risk controls built-in</li>
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">Transparent performance</li>
               </ul>
