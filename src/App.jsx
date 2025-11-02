@@ -75,7 +75,7 @@ function Hero() {
               </div>
               <ul className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-700">
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">MetaTrader 5 Strategies</li>
-                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">NinjaTrader + IBKR coming soon</li>
+                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">NinjaTrader + IBKR coming soon!</li>
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">Risk controls built-in</li>
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">Transparent performance</li>
               </ul>
@@ -92,8 +92,8 @@ function TrustBar() {
   return (
     <div className="border-y border-slate-200 bg-white">
       <div className="max-w-6xl mx-auto px-4 py-4 text-xs md:text-sm text-slate-600 flex flex-wrap items-center gap-4 justify-between">
-        <div>Strategies by real traders • Full automation • Your control</div>
-        <div>30-day money back guarantee • No profit sharing • No hidden fees</div>
+        <div>Built by real traders • Full automation • Your control</div>
+        <div>Money back guarantee • No profit sharing • No hidden fees</div>
         <div>Secure licensing • Simple setup • No coding</div>
       </div>
     </div>
