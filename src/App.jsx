@@ -55,7 +55,7 @@ function Hero() {
               Pick the right trading algorithm in under a minute!
             </h1>
             <p className="mt-4 text-slate-600 text-lg">
-              Uptiq give you the tools to automate your trading through our customizable strategies. Take the quiz and see what your style of algorithm is based on your goals, risk, and platform.
+              Uptiq give you the tools to automate your trading through our customizable strategies. Take the quiz and see what your style of algorithm is based on your goals, risk, and skill level.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a href="#finder" className="px-5 py-3 rounded-2xl bg-black hover:bg-neutral-800 text-white font-semibold">Match Me</a>
