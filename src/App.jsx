@@ -297,9 +297,9 @@ function HowItWorks() {
       <SectionTitle eyebrow="What to expect" title="From quiz → to match → to live in minutes" />
       <div className="grid md:grid-cols-3 gap-4">
         {[
-          { t: "Take the 60-second quiz", d: "We learn your goals, platform, markets and risk tolerance." },
-          { t: "Get a data-driven match", d: "We recommend strategies aligned to your inputs with transparent logic." },
-          { t: "Launch with controls", d: "Use presets or fine-tune risk. Alerts-only or full automation — your call." }
+          { t: "Take the 60-second quiz", d: "We learn your goals, skill level, markets and risk tolerance." },
+          { t: "Get a data-driven match", d: "We’ll narrow down the strategies aligned to your inputs with transparent logic." },
+          { t: "Launch with controls", d: "Use presets or fine-tune risk. Have control over your accounts — no coding required." }
         ].map((x, i) => (
           <div key={i} className="rounded-2xl p-5 border border-slate-200 bg-white shadow-sm">
             <div className="text-neutral-700 text-xs uppercase tracking-wider">Step {i + 1}</div>
@@ -311,6 +311,7 @@ function HowItWorks() {
     </section>
   );
 }
+
 
 function Benefits() {
   return (
