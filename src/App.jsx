@@ -27,7 +27,7 @@ function Header() {
     <header className="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-slate-200">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
        <div className="flex items-center">
-  <img src="/header-logo.png" alt="Uptiq Logo" className="h-8 w-auto md:h-9" />
+  <img src="/header-logo.png" alt="Uptiq Logo" className="h-6 w-auto" />
 </div>
 
 
