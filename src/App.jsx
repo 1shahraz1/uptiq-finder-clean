@@ -43,7 +43,6 @@ function Header() {
     </header>
   );
 }
-
 function Hero() {
   return (
     <section className="relative">
@@ -87,7 +86,6 @@ function Hero() {
     </section>
   );
 }
-
 
 function TrustBar() {
   return (
