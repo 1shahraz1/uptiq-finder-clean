@@ -52,7 +52,7 @@ function Hero() {
           <div>
             <p className="uppercase tracking-wider text-neutral-600 text-xs mb-3">Algorithms made simple</p>
             <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-              Pick the right trading algorithm in under a minute
+              Pick the right trading algorithm in under a minute!
             </h1>
             <p className="mt-4 text-slate-600 text-lg">
               Uptiq give you the tools to automate your trading through our customizable strategies. Take the quiz and see what your style of algorithm is based on your goals, risk, and platform.
