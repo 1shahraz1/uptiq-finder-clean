@@ -8,11 +8,10 @@ export default function App() {
       <TrustBar />
       <main className="max-w-6xl mx-auto px-4">
         <SectionTitle
-  eyebrow="Find your perfect fit"
-  title="Answer a few quick questions — we’ll help match you with algorithms"
-  subtitle="Let us help you navigate based on your personal preferences."
-/>
-
+          eyebrow="Find your perfect fit"
+          title="Answer a few quick questions — we’ll help match you with algorithms"
+          subtitle="Let us help you navigate based on your personal preferences."
+        />
         <FinderCard />
         <HowItWorks />
         <Benefits />
@@ -38,12 +37,13 @@ function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <a href="#finder" className="text-sm px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50">Try the Finder</a>
-          <a href="https://uptiq.io/trial" className="text-sm px-3 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">Start Free Trial</a>
+          <a href="https://uptiq.io/checkout" className="text-sm px-3 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">Start 1-Year License</a>
         </div>
       </div>
     </header>
   );
 }
+
 function Hero() {
   return (
     <section className="relative">
@@ -75,7 +75,7 @@ function Hero() {
               </div>
               <ul className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-700">
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">MetaTrader 5 Strategies</li>
-                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">NinjaTrader + IBKR coming soon!</li>
+                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">NinjaTrader + IBKR coming soon</li>
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">Risk controls built-in</li>
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">Transparent performance</li>
               </ul>
@@ -92,14 +92,13 @@ function TrustBar() {
   return (
     <div className="border-y border-slate-200 bg-white">
       <div className="max-w-6xl mx-auto px-4 py-4 text-xs md:text-sm text-slate-600 flex flex-wrap items-center gap-4 justify-between">
-        <div>Built by real traders • Full automation • Your control</div>
-        <div>Money back guarantee • No profit sharing • No hidden fees</div>
+        <div>Strategies by real traders • Full automation • Your control</div>
+        <div>30-day money back guarantee • No profit sharing • No hidden fees</div>
         <div>Secure licensing • Simple setup • No coding</div>
       </div>
     </div>
   );
 }
-
 
 function SectionTitle({ eyebrow, title, subtitle }) {
   return (
@@ -160,7 +159,7 @@ function FinderCard() {
     const ok = /.+@.+\..+/.test(email);
     if (!ok) return alert("Please enter a valid email.");
     setEmailCaptured(true);
-    // Optional: replace with your webhook (Airtable/HubSpot/Zapier)
+    // TODO: Add your webhook URL to receive submissions
     const WEBHOOK_URL = "";
     if (WEBHOOK_URL) {
       try {
@@ -278,7 +277,7 @@ function ResultPanel({ result, answers }) {
               {item.highlights.map((h, i) => <li key={i}>{h}</li>)}
             </ul>
             <div className="mt-4">
-              <a href="https://uptiq.io/trial" className="px-4 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white text-sm font-semibold">Start 7-Day Trial</a>
+              <a href="https://uptiq.io/checkout" className="px-4 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white text-sm font-semibold">Start 1-Year License</a>
             </div>
           </div>
         ))}
@@ -312,7 +311,6 @@ function HowItWorks() {
   );
 }
 
-
 function Benefits() {
   const items = [
     { icon: CheckIcon, t: "Transparent performance", d: "Clear backtests, stats, risk, and assumptions." },
@@ -343,24 +341,33 @@ function Benefits() {
   );
 }
 
+/* Simple inline icons (stroke currentColor) */
+function CheckIcon(){ return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="stroke-current"><path d="M20 6L9 17l-5-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>); }
+function ShieldIcon(){ return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="stroke-current"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>); }
+function CodeIcon(){ return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="stroke-current"><path d="M16 18l6-6-6-6M8 6L2 12l6 6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>); }
+function MonitorIcon(){ return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="stroke-current"><rect x="2" y="3" width="20" height="14" rx="2" ry="2" strokeWidth="2"/><path d="M8 21h8M12 17v4" strokeWidth="2" strokeLinecap="round"/></svg>); }
+function LifeBuoyIcon(){ return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="stroke-current"><circle cx="12" cy="12" r="10" strokeWidth="2"/><circle cx="12" cy="12" r="4" strokeWidth="2"/><path d="M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M19.07 4.93l-4.24 4.24M9.17 14.83L4.93 19.07" strokeWidth="2" strokeLinecap="round"/></svg>); }
+function TagIcon(){ return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="stroke-current"><path d="M20.59 13.41L11 3H4v7l9.59 9.59a2 2 0 0 0 2.82 0l4.18-4.18a2 2 0 0 0 0-2.82Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>); }
 
 function FAQ() {
+  const qs = [
+    { q: "How does the matching work?", a: "We score each algorithm across risk, style, markets, skill level, and automation needs. The top scores are shown — you can still explore others." },
+    { q: "Can I change risk settings?", a: "Yes. Adjust position size, max risk %, ATR-based stops, trade sessions, and more." },
+    { q: "Do I need coding skills?", a: "No. Installation is made simple as copy & paste and support is available 7 days a week." },
+    { q: "Can I run multiple strategies?", a: "Yes. Majority of traders utilize multiple strategies for different assets and markets." }
+  ];
+
   return (
     <section id="faq" className="mt-16 mb-24">
       <SectionTitle eyebrow="FAQ" title="Common questions" />
-      <div className="grid md:grid-cols-2 gap-4">
-        {[
-          { q: "How does the matching work?", a: "We score each algorithm across risk, style, markets, platform, and automation needs. The top scores are shown — you can still explore others." },
-          { q: "Can I change risk settings?", a: "Yes. Adjust position size, max risk %, ATR-based stops, trade sessions, and more." },
-          { q: "Do I need coding skills?", a: "No. Installation is a guided flow and support is available 7 days a week." },
-          { q: "What if I’m not sure yet?", a: "Start with alerts-only mode, journal results, and switch to auto when comfortable." }
-        ].map((x, i) => (
-          <div key={i} className="rounded-2xl p-5 border border-slate-200 bg-white shadow-sm">
-            <div className="font-semibold">{x.q}</div>
-            <p className="text-slate-600 text-sm mt-2">{x.a}</p>
-          </div>
+      <ul className="max-w-4xl mx-auto space-y-5">
+        {qs.map((item, i) => (
+          <li key={i}>
+            <div className="font-semibold">{item.q}</div>
+            <p className="text-slate-600 text-sm mt-1">{item.a}</p>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }
@@ -370,7 +377,9 @@ function Footer() {
     <footer className="border-t border-slate-200 py-10">
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="text-slate-600 text-sm">© {new Date().getFullYear()} UPTIQ. All rights reserved.</div>
-        <div className="text-xs text-slate-500">Trading involves risk. Past performance does not guarantee future results. No guarantee of profits.</div>
+        <div className="text-xs text-slate-500">
+          Trading involves risks. Past performance does not guarantee future results. No guarantee of profits. Algorithms are designed as automation tools.
+        </div>
         <div className="flex items-center gap-4 text-sm">
           <a href="mailto:hello@uptiq.io" className="hover:underline">Contact</a>
           <a href="https://uptiq.io/privacy" className="hover:underline">Privacy</a>
@@ -404,7 +413,7 @@ const ALGORITHMS = [
 function matchAlgos(answers) {
   const weights = { platform: 2.0, style: 2.0, markets: 1.5, risk: 1.5, automation: 1.2, experience: 1.0, session: 0.8 };
   const sessionAffinity = (algoKey, s) => (algoKey==="trendpulse" && (s==="lon"||s==="ny")) ? 0.8 : (algoKey==="swingx" && s==="any" ? 0.5 : 0);
-  const marketSoftBonus = (algoMarkets=[], chosen=[]) => Math.min(1, chosen.filter(m => algoMarkets.includes(m)).length * 0.3);
+  const marketSoftBonus = (algoMarkets=[], chosen=[]) => Math.min(1, chosen.filter((m) => algoMarkets.includes(m)).length * 0.3);
 
   return ALGORITHMS.map((algo) => {
     let score = 0;
