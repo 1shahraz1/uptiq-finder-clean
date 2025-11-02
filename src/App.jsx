@@ -91,13 +91,14 @@ function TrustBar() {
   return (
     <div className="border-y border-slate-200 bg-white">
       <div className="max-w-6xl mx-auto px-4 py-4 text-xs md:text-sm text-slate-600 flex flex-wrap items-center gap-4 justify-between">
-        <div>Founder: 14+ yrs in finance (Merrill • JP Morgan) • AWMA</div>
-        <div>7-day trials • No profit sharing • Cancel anytime</div>
+        <div>Strategies by real traders • Full automation • Your control</div>
+        <div>30-day money back guarantee • No profit sharing • No hidden fees</div>
         <div>Secure licensing • Simple setup • No coding</div>
       </div>
     </div>
   );
 }
+
 
 function SectionTitle({ eyebrow, title, subtitle }) {
   return (
