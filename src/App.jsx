@@ -8,10 +8,11 @@ export default function App() {
       <TrustBar />
       <main className="max-w-6xl mx-auto px-4">
         <SectionTitle
-          eyebrow="Find your perfect fit"
-          title="Answer a few quick questions — we’ll match the right algorithm"
-          subtitle="No coding, 7-day trial on every strategy, and you control the risk."
-        />
+  eyebrow="Find your perfect fit"
+  title="Answer a few quick questions — we’ll help match you with algorithms"
+  subtitle="Let us help you navigate based on your personal preferences."
+/>
+
         <FinderCard />
         <HowItWorks />
         <Benefits />
