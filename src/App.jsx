@@ -314,27 +314,35 @@ function HowItWorks() {
 
 
 function Benefits() {
+  const items = [
+    { icon: CheckIcon, t: "Transparent performance", d: "Clear backtests, stats, risk, and assumptions." },
+    { icon: ShieldIcon, t: "30-day guarantee", d: "We’ll be happy to refund your money if you are not satisfied." },
+    { icon: CodeIcon,  t: "No coding", d: "Install, confirm parameters, connect, and go." },
+    { icon: MonitorIcon, t: "MetaTrader 5", d: "Our strategies are currently for MT5 with other platforms coming soon." },
+    { icon: LifeBuoyIcon, t: "Support, 7 days", d: "We’re here to help you go from demo to live with confidence." },
+    { icon: TagIcon, t: "Fair pricing", d: "No profit-sharing. Straightforward licensing fee." },
+  ];
+
   return (
     <section id="benefits" className="mt-16">
       <SectionTitle eyebrow="Why Uptiq" title="Built for real traders, not just techies" />
-      <div className="grid md:grid-cols-3 gap-4">
-        {[
-          { t: "Transparent performance", d: "Clear stats, risk, and assumptions. No black boxes." },
-          { t: "7-day trials", d: "Test before you commit. Cancel anytime." },
-          { t: "No coding", d: "Install, connect, and go. Parameters are simple sliders and toggles." },
-          { t: "Platform choice", d: "Start with MT5; NinjaTrader and IBKR are on the roadmap." },
-          { t: "Support, 7 days", d: "We’re here to help you go from demo to live with confidence." },
-          { t: "Fair pricing", d: "No profit-sharing. Straightforward monthly subscriptions." }
-        ].map((x, i) => (
-          <div key={i} className="rounded-2xl p-5 border border-slate-200 bg-white shadow-sm">
-            <div className="font-semibold">{x.t}</div>
-            <p className="text-slate-600 text-sm mt-2">{x.d}</p>
-          </div>
+      <ul className="max-w-4xl mx-auto grid md:grid-cols-2 gap-x-10 gap-y-5">
+        {items.map(({ icon: Icon, t, d }, i) => (
+          <li key={i} className="flex items-start gap-4">
+            <span className="mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black text-white">
+              <Icon />
+            </span>
+            <div>
+              <div className="font-semibold">{t}</div>
+              <p className="text-slate-600 text-sm mt-1">{d}</p>
+            </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }
+
 
 function FAQ() {
   return (
