@@ -13,6 +13,7 @@ export default function App() {
           subtitle="Let us help you navigate based on your personal preferences."
         />
         <FinderCard />
+        <BrowseAllCTA />
         <HowItWorks />
         <Benefits />
         <FAQ />
@@ -26,19 +27,23 @@ function Header() {
   return (
     <header className="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-slate-200">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-       <div className="flex items-center">
-  <img src="/header-logo.png" alt="Uptiq Logo" className="h-4 w-auto" />
-</div>
-
+        <div className="flex items-center">
+          <img src="/header-logo.png" alt="Uptiq Logo" className="h-4 w-auto" />
+        </div>
 
         <nav className="hidden md:flex items-center gap-6 text-sm text-slate-600">
           <a href="#how" className="hover:text-slate-900">How it works</a>
           <a href="#benefits" className="hover:text-slate-900">Benefits</a>
           <a href="#faq" className="hover:text-slate-900">FAQ</a>
         </nav>
+
         <div className="flex items-center gap-2">
-          <a href="#finder" className="text-sm px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50">Try the Finder</a>
-          <a href="https://uptiq.io/checkout" className="text-sm px-3 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">Start 1-Year License</a>
+          <a href="#finder" className="text-sm px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50">
+            Try the Finder
+          </a>
+          <a href="https://uptiq.io/shop/" className="text-sm px-3 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">
+            View Strategies
+          </a>
         </div>
       </div>
     </header>
@@ -117,71 +122,65 @@ function FinderCard() {
   const [email, setEmail] = useState("");
   const [emailCaptured, setEmailCaptured] = useState(false);
 
-const steps = [
-  {
-    key: "experience",
-    q: "What’s your experience level with automated trading?",
-    options: [
-      { v: "new", label: "New to automation" },
-      { v: "some", label: "Some experience (comfortable following rules)" },
-      { v: "advanced", label: "Advanced / quantitative (systems + stats)" },
-    ],
-  },
-  {
-    key: "frequency",
-    q: "How often do you want the strategy to trade?",
-    options: [
-      { v: "low", label: "Low frequency (very selective trades)" },
-      { v: "medium", label: "Moderate activity (steady but controlled)" },
-      { v: "high", label: "High frequency (many trades driven by probability)" },
-    ],
-  },
-  {
-    key: "holding",
-    q: "How long are you comfortable holding positions?",
-    options: [
-      { v: "minutes", label: "Minutes (fast-paced)" },
-      { v: "hours", label: "Hours (intraday)" },
-      { v: "multi", label: "Multiple hours to days (patient swing-style)" },
-    ],
-  },
-  {
-    key: "riskMindset",
-    q: "Which best describes your risk mindset?",
-    options: [
-      { v: "protect", label: "Capital protection and fewer trades" },
-      { v: "payoff", label: "Small losses, larger winners (payoff-focused)" },
-      { v: "stat", label: "I understand streaks/drawdowns in statistical systems" },
-    ],
-  },
-  {
-    key: "priority",
-    q: "What matters most to you in a strategy?",
-    options: [
-      { v: "clarity", label: "Clarity and discipline (avoid noise)" },
-      { v: "repeatable", label: "Repeatable logic with volatility-aware controls" },
-      { v: "probability", label: "Probability and long-term edge over individual trades" },
-    ],
-  },
-];
-
+  // 5-question quiz aligned to current Uptiq lineup (MT5 + Forex + fully automated)
+  const steps = [
+    {
+      key: "experience",
+      q: "What’s your experience level with automated trading?",
+      options: [
+        { v: "new", label: "New to automation" },
+        { v: "some", label: "Some experience (comfortable following rules)" },
+        { v: "advanced", label: "Advanced / quantitative (systems + stats)" },
+      ],
+    },
+    {
+      key: "frequency",
+      q: "How often do you want the strategy to trade?",
+      options: [
+        { v: "low", label: "Low frequency (very selective trades)" },
+        { v: "medium", label: "Moderate activity (steady but controlled)" },
+        { v: "high", label: "High frequency (many trades driven by probability)" },
+      ],
+    },
+    {
+      key: "holding",
+      q: "How long are you comfortable holding positions?",
+      options: [
+        { v: "minutes", label: "Minutes (fast-paced)" },
+        { v: "hours", label: "Hours (intraday)" },
+        { v: "multi", label: "Multiple hours to days (patient swing-style)" },
+      ],
+    },
+    {
+      key: "riskMindset",
+      q: "Which best describes your risk mindset?",
+      options: [
+        { v: "protect", label: "Capital protection and fewer trades" },
+        { v: "payoff", label: "Small losses, larger winners (payoff-focused)" },
+        { v: "stat", label: "I understand streaks/drawdowns in statistical systems" },
+      ],
+    },
+    {
+      key: "priority",
+      q: "What matters most to you in a strategy?",
+      options: [
+        { v: "clarity", label: "Clarity and discipline (avoid noise)" },
+        { v: "repeatable", label: "Repeatable logic with volatility-aware controls" },
+        { v: "probability", label: "Probability and long-term edge over individual trades" },
+      ],
+    },
+  ];
 
   const progress = Math.round((step / steps.length) * 100);
 
-  const handleSelect = (key, value, multi) => {
-    setAnswers((prev) => {
-      if (!multi) return { ...prev, [key]: value };
-      const current = new Set(prev[key] || []);
-      current.has(value) ? current.delete(value) : current.add(value);
-      return { ...prev, [key]: Array.from(current) };
-    });
+  const handleSelect = (key, value) => {
+    setAnswers((prev) => ({ ...prev, [key]: value }));
   };
 
   const canContinue = useMemo(() => {
     const s = steps[step];
     if (!s) return false;
-    const val = answers[s.key];
-    return s.multi ? Array.isArray(val) && val.length > 0 : Boolean(val);
+    return Boolean(answers[s.key]);
   }, [answers, step]);
 
   const result = useMemo(() => matchAlgos(answers), [answers]);
@@ -192,6 +191,7 @@ const steps = [
     const ok = /.+@.+\..+/.test(email);
     if (!ok) return alert("Please enter a valid email.");
     setEmailCaptured(true);
+
     // TODO: Add your webhook URL to receive submissions
     const WEBHOOK_URL = "";
     if (WEBHOOK_URL) {
@@ -199,14 +199,19 @@ const steps = [
         await fetch(WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, answers, ts: new Date().toISOString() })
+          body: JSON.stringify({
+            email,
+            answers,
+            matched: result.slice(0, 2).map((x) => ({ key: x.key, name: x.name, score: x.score })),
+            ts: new Date().toISOString(),
+          }),
         });
       } catch {}
     }
   };
 
   return (
-    <section id="finder" className="mb-20">
+    <section id="finder" className="mb-10">
       <div className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
         <div className="flex items-center justify-between gap-4 mb-6">
           <h3 className="text-xl font-semibold">Uptiq Algo Finder</h3>
@@ -221,13 +226,11 @@ const steps = [
             <p className="text-lg mb-4">{steps[step].q}</p>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
               {steps[step].options.map((o) => {
-                const selected = steps[step].multi
-                  ? (answers[steps[step].key] || []).includes(o.v)
-                  : answers[steps[step].key] === o.v;
+                const selected = answers[steps[step].key] === o.v;
                 return (
                   <button
                     key={o.v}
-                    onClick={() => handleSelect(steps[step].key, o.v, steps[step].multi)}
+                    onClick={() => handleSelect(steps[step].key, o.v)}
                     className={`p-4 text-left rounded-2xl border font-medium transition ${
                       selected
                         ? "border-black bg-black text-white"
@@ -267,6 +270,27 @@ const steps = [
   );
 }
 
+function BrowseAllCTA() {
+  return (
+    <section className="mb-20">
+      <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 md:p-8 text-center">
+        <div className="text-xl font-semibold">Prefer to browse instead?</div>
+        <p className="mt-2 text-slate-600">
+          Skip the quiz and view all available MetaTrader 5 strategies in the Uptiq Shop.
+        </p>
+        <div className="mt-5">
+          <a
+            href="https://uptiq.io/shop/"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-2xl bg-black hover:bg-neutral-800 text-white font-semibold"
+          >
+            View All Strategies
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function EmailGate({ email, setEmail, onSubmit }) {
   return (
     <div className="max-w-lg mx-auto text-center">
@@ -281,7 +305,9 @@ function EmailGate({ email, setEmail, onSubmit }) {
           className="flex-1 px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-neutral-800"
           required
         />
-        <button className="px-5 py-3 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">Show My Matches</button>
+        <button className="px-5 py-3 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">
+          Show My Matches
+        </button>
       </form>
       <p className="text-xs text-slate-500 mt-2">We’ll also send setup tips for your match. Unsubscribe anytime.</p>
     </div>
@@ -289,35 +315,63 @@ function EmailGate({ email, setEmail, onSubmit }) {
 }
 
 function ResultPanel({ result, answers }) {
-  const top = result.slice(0, 3);
+  const primary = result[0];
+  const secondary = result[1];
+
   return (
     <div>
       <h4 className="text-lg font-semibold">Your best matches</h4>
-      <p className="text-slate-600 mt-1 text-sm">Based on your inputs we recommend starting with these strategies.</p>
+      <p className="text-slate-600 mt-1 text-sm">
+        Based on your inputs, here are the two best-fitting strategies to start with.
+      </p>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-3">
-        {top.map((item) => (
-          <div key={item.key} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between">
+      <div className="mt-5 grid gap-4 md:grid-cols-2">
+        {[{ label: "Primary match", item: primary }, { label: "Secondary match", item: secondary }].map(({ label, item }) => (
+          <div key={item.key} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="text-neutral-700 text-xs uppercase tracking-wide">{item.badge}</div>
-                <div className="text-lg font-semibold">{item.name}</div>
+                <div className="text-xs uppercase tracking-wide text-slate-500">{label}</div>
+                <div className="text-neutral-800 text-xs uppercase tracking-wide mt-1">{item.badge}</div>
+                <div className="text-xl font-semibold mt-1">{item.name}</div>
               </div>
               <div className="text-sm text-slate-600">Score {Math.round(item.score)}</div>
             </div>
-            <p className="text-sm text-slate-600 mt-2 min-h-[56px]">{item.desc}</p>
-            <ul className="mt-2 text-xs text-slate-500 list-disc list-inside space-y-1">
-              {item.highlights.map((h, i) => <li key={i}>{h}</li>)}
+
+            <p className="text-sm text-slate-600 mt-3">{item.desc}</p>
+
+            {item.warning && (
+              <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                <span className="font-semibold">Note:</span> {item.warning}
+              </div>
+            )}
+
+            <ul className="mt-3 text-sm text-slate-700 list-disc list-inside space-y-1">
+              {item.highlights.map((h, i) => (
+                <li key={i}>{h}</li>
+              ))}
             </ul>
-            <div className="mt-4">
-              <a href="https://uptiq.io/checkout" className="px-4 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white text-sm font-semibold">Start 1-Year License</a>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+              <a
+                href="https://uptiq.io/shop/"
+                className="px-5 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white text-sm font-semibold"
+              >
+                View in Shop
+              </a>
+              <a
+                href="#finder"
+                className="px-5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm font-semibold"
+              >
+                Retake Quiz
+              </a>
             </div>
           </div>
         ))}
       </div>
 
       <div className="mt-6 text-xs text-slate-500">
-        <span className="font-semibold text-slate-700">Your inputs:</span> {Object.entries(answers).map(([k, v]) => `${k}=${Array.isArray(v)? v.join(','): v}`).join(" • ")}
+        <span className="font-semibold text-slate-700">Your inputs:</span>{" "}
+        {Object.entries(answers).map(([k, v]) => `${k}=${v}`).join(" • ")}
       </div>
     </div>
   );
@@ -329,9 +383,9 @@ function HowItWorks() {
       <SectionTitle eyebrow="What to expect" title="From quiz → to match → to live in minutes" />
       <div className="grid md:grid-cols-3 gap-4">
         {[
-          { t: "Take the 60-second quiz", d: "We learn your goals, skill level, markets and risk tolerance." },
-          { t: "Get a data-driven match", d: "We’ll narrow down the strategies aligned to your inputs with transparent logic." },
-          { t: "Launch with controls", d: "Use presets or fine-tune risk. Have control over your accounts — no coding required." }
+          { t: "Take the 60-second quiz", d: "We learn your goals, skill level, and trading preferences." },
+          { t: "Get a data-driven match", d: "We narrow down strategies aligned to your inputs with transparent logic." },
+          { t: "Launch with controls", d: "Use presets, confirm parameters, and go live with a simple MT5 setup." }
         ].map((x, i) => (
           <div key={i} className="rounded-2xl p-5 border border-slate-200 bg-white shadow-sm">
             <div className="text-neutral-700 text-xs uppercase tracking-wider">Step {i + 1}</div>
@@ -349,7 +403,7 @@ function Benefits() {
     { icon: CheckIcon, t: "Transparent performance", d: "Clear backtests, stats, risk, and assumptions." },
     { icon: ShieldIcon, t: "30-day guarantee", d: "We’ll be happy to refund your money if you are not satisfied." },
     { icon: CodeIcon,  t: "No coding", d: "Install, confirm parameters, connect, and go." },
-    { icon: MonitorIcon, t: "MetaTrader 5", d: "Our strategies are currently for MT5 with other platforms coming soon." },
+    { icon: MonitorIcon, t: "MetaTrader 5", d: "Strategies are currently for MT5 (Forex-focused)." },
     { icon: LifeBuoyIcon, t: "Support, 7 days", d: "We’re here to help you go from demo to live with confidence." },
     { icon: TagIcon, t: "Fair pricing", d: "No profit-sharing. Straightforward licensing fee." },
   ];
@@ -384,10 +438,10 @@ function TagIcon(){ return (<svg width="18" height="18" viewBox="0 0 24 24" fill
 
 function FAQ() {
   const qs = [
-    { q: "How does the matching work?", a: "We score each algorithm across risk, style, markets, skill level, and automation needs. The top scores are shown — you can still explore others." },
-    { q: "Can I change risk settings?", a: "Yes. Adjust position size, max risk %, ATR-based stops, trade sessions, and more." },
-    { q: "Do I need coding skills?", a: "No. Installation is made simple as copy & paste and support is available 7 days a week." },
-    { q: "Can I run multiple strategies?", a: "Yes. Majority of traders utilize multiple strategies for different assets and markets." }
+    { q: "How does the matching work?", a: "We score each algorithm across experience level, trade frequency preference, holding time, and risk mindset. The top matches are shown — you can still browse all strategies." },
+    { q: "Do I need coding skills?", a: "No. Installation is designed to be simple (copy & paste), and support is available 7 days a week." },
+    { q: "Can I run multiple strategies?", a: "Yes. Many traders use multiple strategies to diversify behavior across market conditions." },
+    { q: "Is this financial advice?", a: "No. These tools are for informational and educational purposes. Trading involves risk and results vary." }
   ];
 
   return (
@@ -409,7 +463,7 @@ function Footer() {
   return (
     <footer className="border-t border-slate-200 py-10">
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="text-slate-600 text-sm">© {new Date().getFullYear()} UPTIQ. All rights reserved.</div>
+        <div className="text-slate-600 text-sm">© {new Date().getFullYear()} Uptiq. All rights reserved.</div>
         <div className="text-xs text-slate-500">
           Trading involves risks. Past performance does not guarantee future results. No guarantee of profits. Algorithms are designed as automation tools.
         </div>
@@ -423,44 +477,173 @@ function Footer() {
   );
 }
 
-/* ---------- Matching Logic ---------- */
+/* ---------- Matching Logic (updated to your 4 strategies) ---------- */
 const ALGORITHMS = [
-  { key: "trendpulse", name: "TrendPulse", badge: "Momentum • MT5",
-    desc: "Momentum-based scalper with ATR risk controls and session filters.",
-    highlights: ["Best for London/NY sessions", "ATR-based SL/TP", "Option: alerts or auto"],
-    tags: { platforms:["mt5"], styles:["trend","scalp"], markets:["forex","indices"], risk:["moderate","aggressive"], automation:["semi","full"], experience:["intermediate","advanced"] } },
-  { key: "sma8", name: "8-SMA Trend Follower", badge: "Trend • MT5",
-    desc: "Clean trend-following engine ideal for beginners and steady profiles.",
-    highlights: ["Great for beginners", "Clear rules", "Stable risk curves"],
-    tags: { platforms:["mt5"], styles:["trend"], markets:["forex","indices","futures"], risk:["conservative","moderate"], automation:["alerts","semi","full"], experience:["new","intermediate"] } },
-  { key: "vbb", name: "Volatility-Filtered BB", badge: "Mean-Rev • MT5",
-    desc: "Bollinger-based mean-reversion filtered by ADX/ATR for chop control.",
-    highlights: ["Works in ranges", "Tight risk", "Good for alerts-first"],
-    tags: { platforms:["mt5"], styles:["mean"], markets:["forex","crypto"], risk:["conservative","moderate"], automation:["alerts","semi"], experience:["new","intermediate"] } },
-  { key: "swingx", name: "SwingX", badge: "Swing • Multi-Asset",
-    desc: "Multi-day swing framework for indices & FX with 200-SMA + RSI filters.",
-    highlights: ["Fewer trades", "Higher R multiples", "Good for busy pros"],
-    tags: { platforms:["mt5","ibkr"], styles:["swing","trend"], markets:["indices","forex","futures"], risk:["moderate"], automation:["alerts","semi","full"], experience:["intermediate","advanced"] } }
+  {
+    key: "flowguard",
+    name: "FlowGuard Momentum",
+    badge: "Momentum + Trend • M15 • Selective",
+    desc: "A disciplined momentum strategy that waits for alignment with the prevailing trend — designed for clarity, reduced noise, and repeatable execution.",
+    highlights: [
+      "Very selective trade profile (low frequency)",
+      "Trend + momentum realignment logic",
+      "Designed for controlled, rules-based execution",
+    ],
+    warning: "",
+  },
+  {
+    key: "trendspring",
+    name: "TrendSpring",
+    badge: "Payoff-Focused Trend • H1 • Selective",
+    desc: "A trend-aligned system built around the principle that payoff matters more than win rate — small controlled losses with larger winners when moves follow through.",
+    highlights: [
+      "Low trade frequency with payoff-driven profile",
+      "Built for disciplined traders who can tolerate losing streaks",
+      "Designed to capture larger directional moves",
+    ],
+    warning: "",
+  },
+  {
+    key: "voltiband",
+    name: "VoltiBand Trend",
+    badge: "Volatility-Aware Mean Reversion • M5",
+    desc: "Mean-reversion entries filtered by trend structure, with volatility-aware risk management (ATR-based) to adapt to shifting market conditions.",
+    highlights: [
+      "Moderate trade frequency on M5",
+      "Volatility-aware exits (ATR-based)",
+      "Designed to avoid random mean-reversion noise",
+    ],
+    warning: "",
+  },
+  {
+    key: "spreadlock",
+    name: "SpreadLock Alpha",
+    badge: "Market-Neutral Quant • M5 • High Frequency",
+    desc: "A quantitative, market-neutral strategy that trades statistical divergence between two related instruments — performance driven by relative normalization rather than market direction.",
+    highlights: [
+      "High frequency, probability-driven trade flow",
+      "Designed for traders comfortable with statistics and optimization",
+      "Pairs/relationship trading (long/short structure)",
+    ],
+    warning:
+      "This is an Advanced strategy. It can experience long losing streaks and requires comfort with statistical behavior and parameter testing before going live.",
+  },
 ];
 
-function matchAlgos(answers) {
-  const weights = { platform: 2.0, style: 2.0, markets: 1.5, risk: 1.5, automation: 1.2, experience: 1.0, session: 0.8 };
-  const sessionAffinity = (algoKey, s) => (algoKey==="trendpulse" && (s==="lon"||s==="ny")) ? 0.8 : (algoKey==="swingx" && s==="any" ? 0.5 : 0);
-  const marketSoftBonus = (algoMarkets=[], chosen=[]) => Math.min(1, chosen.filter((m) => algoMarkets.includes(m)).length * 0.3);
+// Simple scoring model aligned to your backtests and positioning
+function matchAlgos(a) {
+  const base = {
+    flowguard: 0,
+    trendspring: 0,
+    voltiband: 0,
+    spreadlock: 0,
+  };
 
-  return ALGORITHMS.map((algo) => {
-    let score = 0;
-    if (answers.platform && algo.tags.platforms.includes(answers.platform)) score += 10 * weights.platform;
-    if (answers.style && algo.tags.styles.includes(answers.style)) score += 10 * weights.style;
-    if (answers.markets?.length) {
-      const overlap = answers.markets.filter((m) => algo.tags.markets.includes(m)).length;
-      score += overlap * 8 * weights.markets;
-      score += marketSoftBonus(algo.tags.markets, answers.markets);
-    }
-    if (answers.risk && algo.tags.risk.includes(answers.risk)) score += 8 * weights.risk;
-    if (answers.automation && algo.tags.automation.includes(answers.automation)) score += 6 * weights.automation;
-    if (answers.experience && algo.tags.experience.includes(answers.experience)) score += 5 * weights.experience;
-    score += sessionAffinity(algo.key, answers.session) * weights.session;
+  // Q1 Experience
+  if (a.experience === "new") {
+    base.flowguard += 18;
+    base.trendspring += 16;
+    base.voltiband += 8;
+    base.spreadlock += 2; // still possible, but unlikely
+  }
+  if (a.experience === "some") {
+    base.flowguard += 14;
+    base.trendspring += 12;
+    base.voltiband += 14;
+    base.spreadlock += 8;
+  }
+  if (a.experience === "advanced") {
+    base.flowguard += 8;
+    base.trendspring += 10;
+    base.voltiband += 14;
+    base.spreadlock += 22;
+  }
+
+  // Q2 Frequency preference (major differentiator)
+  if (a.frequency === "low") {
+    base.flowguard += 24;
+    base.trendspring += 22;
+    base.voltiband += 8;
+    base.spreadlock += 2;
+  }
+  if (a.frequency === "medium") {
+    base.flowguard += 10;
+    base.trendspring += 10;
+    base.voltiband += 22;
+    base.spreadlock += 10;
+  }
+  if (a.frequency === "high") {
+    base.flowguard += 2;
+    base.trendspring += 2;
+    base.voltiband += 10;
+    base.spreadlock += 26;
+  }
+
+  // Q3 Holding time (timeframe fit)
+  if (a.holding === "minutes") {
+    base.voltiband += 18;
+    base.spreadlock += 18;
+    base.flowguard += 4;
+    base.trendspring += 2;
+  }
+  if (a.holding === "hours") {
+    base.flowguard += 16;
+    base.voltiband += 10;
+    base.trendspring += 10;
+    base.spreadlock += 8;
+  }
+  if (a.holding === "multi") {
+    base.trendspring += 18;
+    base.flowguard += 10;
+    base.voltiband += 6;
+    base.spreadlock += 4;
+  }
+
+  // Q4 Risk mindset (psychological fit)
+  if (a.riskMindset === "protect") {
+    base.flowguard += 18;
+    base.voltiband += 10;
+    base.trendspring += 8;
+    base.spreadlock += 4;
+  }
+  if (a.riskMindset === "payoff") {
+    base.trendspring += 20;
+    base.flowguard += 10;
+    base.voltiband += 8;
+    base.spreadlock += 6;
+  }
+  if (a.riskMindset === "stat") {
+    base.spreadlock += 22;
+    base.voltiband += 14;
+    base.trendspring += 6;
+    base.flowguard += 6;
+  }
+
+  // Q5 Priority
+  if (a.priority === "clarity") {
+    base.flowguard += 18;
+    base.trendspring += 10;
+    base.voltiband += 8;
+    base.spreadlock += 6;
+  }
+  if (a.priority === "repeatable") {
+    base.voltiband += 18;
+    base.flowguard += 10;
+    base.trendspring += 10;
+    base.spreadlock += 10;
+  }
+  if (a.priority === "probability") {
+    base.spreadlock += 18;
+    base.voltiband += 12;
+    base.trendspring += 8;
+    base.flowguard += 6;
+  }
+
+  // Build scored list
+  const scored = ALGORITHMS.map((algo) => {
+    const score = base[algo.key] ?? 0;
     return { ...algo, score };
-  }).sort((a, b) => b.score - a.score);
+  }).sort((x, y) => y.score - x.score);
+
+  return scored;
 }
