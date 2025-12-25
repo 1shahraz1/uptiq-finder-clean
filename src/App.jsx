@@ -24,7 +24,7 @@ const FLUENTCRM_SUBMIT_URL =
     : "";
 
 // If CAPTURE_MODE === "webhook"
-const WEBHOOK_URL = ""; // <-- paste Make/Zapier webhook URL here
+const WEBHOOK_URL = "https://hook.us2.make.com/6gn9xzbvgrn00uinnvwtuweh3yg1mzp3";
 
 export default function App() {
   return (
