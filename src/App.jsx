@@ -117,22 +117,54 @@ function FinderCard() {
   const [email, setEmail] = useState("");
   const [emailCaptured, setEmailCaptured] = useState(false);
 
-  const steps = [
-    { key: "experience", q: "What’s your trading experience?",
-      options: [{ v: "new", label: "New to algos" }, { v: "intermediate", label: "Some experience" }, { v: "advanced", label: "Advanced / prop" }] },
-    { key: "platform", q: "Which platform will you use?",
-      options: [{ v: "mt5", label: "MetaTrader 5" }, { v: "ninja", label: "NinjaTrader" }, { v: "ibkr", label: "Interactive Brokers" }] },
-    { key: "style", q: "Preferred style?",
-      options: [{ v: "scalp", label: "Scalping (fast)" }, { v: "swing", label: "Swing (multi-day)" }, { v: "trend", label: "Trend-following" }, { v: "mean", label: "Mean-reversion" }] },
-    { key: "markets", q: "Markets you trade?",
-      options: [{ v: "forex", label: "Forex" }, { v: "indices", label: "Indices" }, { v: "crypto", label: "Crypto" }, { v: "futures", label: "Futures" }], multi: true },
-    { key: "risk", q: "Risk tolerance?",
-      options: [{ v: "conservative", label: "Conservative" }, { v: "moderate", label: "Moderate" }, { v: "aggressive", label: "Aggressive" }] },
-    { key: "automation", q: "How automated do you want to be?",
-      options: [{ v: "alerts", label: "Signals/alerts only" }, { v: "semi", label: "Semi-auto (confirm entries)" }, { v: "full", label: "Fully automated" }] },
-    { key: "session", q: "When do you usually trade?",
-      options: [{ v: "lon", label: "London session" }, { v: "ny", label: "New York session" }, { v: "asia", label: "Asia session" }, { v: "any", label: "Any / varies" }] },
-  ];
+const steps = [
+  {
+    key: "experience",
+    q: "What’s your experience level with automated trading?",
+    options: [
+      { v: "new", label: "New to automation" },
+      { v: "some", label: "Some experience (comfortable following rules)" },
+      { v: "advanced", label: "Advanced / quantitative (systems + stats)" },
+    ],
+  },
+  {
+    key: "frequency",
+    q: "How often do you want the strategy to trade?",
+    options: [
+      { v: "low", label: "Low frequency (very selective trades)" },
+      { v: "medium", label: "Moderate activity (steady but controlled)" },
+      { v: "high", label: "High frequency (many trades driven by probability)" },
+    ],
+  },
+  {
+    key: "holding",
+    q: "How long are you comfortable holding positions?",
+    options: [
+      { v: "minutes", label: "Minutes (fast-paced)" },
+      { v: "hours", label: "Hours (intraday)" },
+      { v: "multi", label: "Multiple hours to days (patient swing-style)" },
+    ],
+  },
+  {
+    key: "riskMindset",
+    q: "Which best describes your risk mindset?",
+    options: [
+      { v: "protect", label: "Capital protection and fewer trades" },
+      { v: "payoff", label: "Small losses, larger winners (payoff-focused)" },
+      { v: "stat", label: "I understand streaks/drawdowns in statistical systems" },
+    ],
+  },
+  {
+    key: "priority",
+    q: "What matters most to you in a strategy?",
+    options: [
+      { v: "clarity", label: "Clarity and discipline (avoid noise)" },
+      { v: "repeatable", label: "Repeatable logic with volatility-aware controls" },
+      { v: "probability", label: "Probability and long-term edge over individual trades" },
+    ],
+  },
+];
+
 
   const progress = Math.round((step / steps.length) * 100);
 
