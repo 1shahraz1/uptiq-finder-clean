@@ -58,10 +58,10 @@ function Header() {
           </a>
           {/* Keep as is now (your current behavior/URL) */}
           <a
-            href="https://uptiq.io/checkout"
+            href="https://uptiq.io/shop/"
             className="text-sm px-3 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold"
           >
-            Start 1-Year License
+            View Strategies
           </a>
         </div>
       </div>
