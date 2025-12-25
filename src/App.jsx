@@ -244,10 +244,34 @@ function FinderCard() {
 
   // Soft gate: show primary result immediately; email reveals secondary + full details
   const handleEmailSubmit = async (e) => {
-    e.preventDefault();
-    const ok = /.+@.+\..+/.test(email);
-    if (!ok) return alert("Please enter a valid email.");
-    setEmailCaptured(true);
+  e.preventDefault();
+
+  const ok = /.+@.+\..+/.test(email);
+  if (!ok) return alert("Please enter a valid email.");
+
+  setEmailCaptured(true);
+
+  try {
+    await fetch("https://uptiq.io/wp-json/fluent-crm/v2/forms/4/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        meta: {
+          source: "uptiq_algo_finder",
+          primary_match: primary?.name,
+          secondary_match: secondary?.name,
+          answers: answers
+        }
+      })
+    });
+  } catch (err) {
+    console.error("FluentCRM submission failed", err);
+  }
+};
+
 
     // Optional: Add your webhook URL to receive submissions
     const WEBHOOK_URL = "";
