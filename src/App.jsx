@@ -1,39 +1,58 @@
 import React, { useMemo, useState } from "react";
 
+/**
+ * LEAD CAPTURE CONFIG
+ *
+ * Choose ONE:
+ *
+ * A) FluentCRM Form (recommended for WordPress-native automation)
+ *    - You must create the form in: FluentCRM -> Forms
+ *    - Then set FLUENTCRM_FORM_ID
+ *    - Endpoint: https://uptiq.io/wp-json/fluent-crm/v2/forms/{id}/submit
+ *
+ * B) Webhook (Make/Zapier) (most reliable, avoids WP REST/CORS issues)
+ *    - Set WEBHOOK_URL to your Make/Zapier catch hook
+ *    - Works immediately, then you can push into FluentCRM from Make/Zapier.
+ */
+const CAPTURE_MODE = "webhook"; // "fluentcrm" OR "webhook"
+
+// If CAPTURE_MODE === "fluentcrm"
+const FLUENTCRM_FORM_ID = 0; // <-- put FluentCRM form id here (NOT Fluent Forms id)
+const FLUENTCRM_SUBMIT_URL =
+  FLUENTCRM_FORM_ID > 0
+    ? `https://uptiq.io/wp-json/fluent-crm/v2/forms/${FLUENTCRM_FORM_ID}/submit`
+    : "";
+
+// If CAPTURE_MODE === "webhook"
+const WEBHOOK_URL = ""; // <-- paste Make/Zapier webhook URL here
+
 export default function App() {
   return (
     <div className="min-h-screen bg-white text-slate-900">
       <Header />
       <Hero />
       <TrustBar />
-
       <main className="max-w-6xl mx-auto px-4">
         <SectionTitle
           eyebrow="Find your perfect fit"
           title="Answer a few quick questions — we’ll help match you with algorithms"
           subtitle="Let us help you navigate based on your personal preferences."
         />
-
         <FinderCard />
-
         <HowItWorks />
         <Benefits />
         <FAQ />
       </main>
-
       <Footer />
     </div>
   );
 }
-
-/* ---------------- Header / Hero ---------------- */
 
 function Header() {
   return (
     <header className="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-slate-200">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center">
-          {/* Keep your current header logo path */}
           <img src="/header-logo.png" alt="Uptiq Logo" className="h-4 w-auto" />
         </div>
 
@@ -56,7 +75,6 @@ function Header() {
           >
             Try the Finder
           </a>
-          {/* Keep as is now (your current behavior/URL) */}
           <a
             href="https://uptiq.io/shop/"
             className="text-sm px-3 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold"
@@ -78,19 +96,14 @@ function Hero() {
             <p className="uppercase tracking-wider text-neutral-600 text-xs mb-3">
               Algorithms made simple
             </p>
-
             <h1 className="text-4xl md:text-5xl font-bold leading-tight">
               Pick the right trading algorithm in under a minute!
             </h1>
-
             <p className="mt-4 text-slate-600 text-lg">
-              Uptiq give you the tools to automate your trading through our customizable
-              strategies. Take the quiz and see what your style of algorithm is based on your
-              goals, risk, and skill level.
+              Uptiq give you the tools to automate your trading through our customizable strategies.
+              Take the quiz and see what your style of algorithm is based on your goals, risk, and skill level.
             </p>
-
             <div className="mt-6 flex flex-wrap gap-3">
-              {/* Keep as is now */}
               <a
                 href="#finder"
                 className="px-5 py-3 rounded-2xl bg-black hover:bg-neutral-800 text-white font-semibold"
@@ -104,7 +117,6 @@ function Hero() {
                 How it works
               </a>
             </div>
-
             <p className="mt-3 text-xs text-slate-500">
               No hidden fees or charges • No coding needed • 30 day money back guarantee
             </p>
@@ -113,14 +125,12 @@ function Hero() {
           <div className="relative">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="aspect-video rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm">
-                {/* Keep your screenshot file name/path */}
                 <img
                   src="/Screenshot%202025-10-09%20130034.png"
                   alt="Uptiq Strategy Dashboard Screenshot"
                   className="w-full h-full object-cover"
                 />
               </div>
-
               <ul className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-700">
                 <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">
                   MetaTrader 5 Strategies
@@ -167,15 +177,13 @@ function SectionTitle({ eyebrow, title, subtitle }) {
   );
 }
 
-/* ---------------- Finder ---------------- */
-
 function FinderCard() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [email, setEmail] = useState("");
   const [emailCaptured, setEmailCaptured] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  // 5 questions total
   const steps = [
     {
       key: "experience",
@@ -183,8 +191,8 @@ function FinderCard() {
       options: [
         { v: "new", label: "New to automation" },
         { v: "some", label: "Some experience (comfortable following rules)" },
-        { v: "advanced", label: "Advanced / quantitative (systems + stats)" },
-      ],
+        { v: "advanced", label: "Advanced / quantitative (systems + stats)" }
+      ]
     },
     {
       key: "frequency",
@@ -192,8 +200,8 @@ function FinderCard() {
       options: [
         { v: "low", label: "Low frequency (very selective trades)" },
         { v: "medium", label: "Moderate activity (steady but controlled)" },
-        { v: "high", label: "High frequency (many trades driven by probability)" },
-      ],
+        { v: "high", label: "High frequency (many trades driven by probability)" }
+      ]
     },
     {
       key: "holding",
@@ -201,8 +209,8 @@ function FinderCard() {
       options: [
         { v: "minutes", label: "Minutes (fast-paced)" },
         { v: "hours", label: "Hours (intraday)" },
-        { v: "multi", label: "Multiple hours to days (patient swing-style)" },
-      ],
+        { v: "multi", label: "Multiple hours to days (patient swing-style)" }
+      ]
     },
     {
       key: "riskMindset",
@@ -210,8 +218,8 @@ function FinderCard() {
       options: [
         { v: "protect", label: "Capital protection and fewer trades" },
         { v: "payoff", label: "Small losses, larger winners (payoff-focused)" },
-        { v: "stat", label: "I understand streaks/drawdowns in statistical systems" },
-      ],
+        { v: "stat", label: "I understand streaks/drawdowns in statistical systems" }
+      ]
     },
     {
       key: "priority",
@@ -219,9 +227,9 @@ function FinderCard() {
       options: [
         { v: "clarity", label: "Clarity and discipline (avoid noise)" },
         { v: "repeatable", label: "Repeatable logic with volatility-aware controls" },
-        { v: "probability", label: "Probability and long-term edge over individual trades" },
-      ],
-    },
+        { v: "probability", label: "Probability and long-term edge over individual trades" }
+      ]
+    }
   ];
 
   const progress = Math.round((step / steps.length) * 100);
@@ -236,55 +244,84 @@ function FinderCard() {
     return Boolean(answers[s.key]);
   }, [answers, step]);
 
-  const ranked = useMemo(() => matchAlgosHybrid(answers), [answers]);
-  const primary = ranked[0];
-  const secondary = ranked[1];
+  const ranked = useMemo(() => matchAlgos(answers), [answers]);
+  const primary = ranked[0] || null;
+  const secondary = ranked[1] || null;
 
   const atFinalStep = step >= steps.length;
 
-  // Soft gate: show primary result immediately; email reveals secondary + full details
-  const handleEmailSubmit = async (e) => {
-  e.preventDefault();
+  async function submitLead(payload) {
+    setSubmitError("");
 
-  const ok = /.+@.+\..+/.test(email);
-  if (!ok) return alert("Please enter a valid email.");
+    if (CAPTURE_MODE === "webhook") {
+      if (!WEBHOOK_URL) throw new Error("WEBHOOK_URL is empty. Paste your Make/Zapier webhook URL.");
+      const res = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      // Some webhooks return 200/204 with empty body; just require OK.
+      if (!res.ok) throw new Error(`Webhook error: ${res.status}`);
+      return;
+    }
 
-  setEmailCaptured(true);
+    // FluentCRM mode
+    if (!FLUENTCRM_SUBMIT_URL) {
+      throw new Error("FLUENTCRM_FORM_ID is not set. Create the form in FluentCRM (not Fluent Forms) and set the ID.");
+    }
 
-  try {
-    await fetch("https://uptiq.io/wp-json/fluent-crm/v2/forms/4/submit", {
+    const res = await fetch(FLUENTCRM_SUBMIT_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: email,
-        meta: {
-          source: "uptiq_algo_finder",
-          primary_match: primary?.name,
-          secondary_match: secondary?.name,
-          answers: answers
-        }
+        email: payload.email,
+        // FluentCRM supports additional fields if your form has them;
+        // we store everything else as meta for later workflows.
+        meta: payload.meta
       })
     });
-  } catch (err) {
-    console.error("FluentCRM submission failed", err);
+
+    // If CORS blocks reading the response, the request may still have been sent.
+    // We treat non-ok as failure only if we can read it.
+    if (!res.ok) throw new Error(`FluentCRM submit failed: ${res.status}`);
   }
-};
 
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
 
-    // Optional: Add your webhook URL to receive submissions
-    const WEBHOOK_URL = "";
-    if (WEBHOOK_URL) {
-      try {
-        await fetch(WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, answers, match: { primary, secondary }, ts: new Date().toISOString() }),
-        });
-      } catch {
-        // Swallow errors; don't block UX
+    const ok = /.+@.+\..+/.test(email);
+    if (!ok) return alert("Please enter a valid email.");
+
+    setEmailCaptured(true);
+
+    const payload = {
+      email,
+      answers,
+      match: {
+        primary: primary?.key,
+        secondary: secondary?.key
+      },
+      meta: {
+        source: "uptiq_algo_finder",
+        primary_name: primary?.name,
+        secondary_name: secondary?.name,
+        primary_url: primary?.url,
+        secondary_url: secondary?.url,
+        // tags can be used in Make/Zapier or your WP automation layer
+        tags: [
+          "algo-finder",
+          primary?.key ? `match-${primary.key}` : null,
+          secondary?.key ? `secondary-${secondary.key}` : null
+        ].filter(Boolean),
+        ts: new Date().toISOString()
       }
+    };
+
+    try {
+      await submitLead(payload);
+    } catch (err) {
+      console.error(err);
+      setSubmitError(err?.message || "Submission failed.");
     }
   };
 
@@ -338,166 +375,121 @@ function FinderCard() {
               </button>
             </div>
           </div>
+        ) : !emailCaptured ? (
+          <EmailGate email={email} setEmail={setEmail} onSubmit={handleEmailSubmit} />
         ) : (
-          <SoftGateResults
-            answers={answers}
-            primary={primary}
-            secondary={secondary}
-            email={email}
-            setEmail={setEmail}
-            emailCaptured={emailCaptured}
-            onSubmit={handleEmailSubmit}
-          />
+          <ResultPanel primary={primary} secondary={secondary} submitError={submitError} />
         )}
       </div>
 
-      <BrowseAllCTA />
-    </section>
-  );
-}
-
-function SoftGateResults({ answers, primary, secondary, email, setEmail, emailCaptured, onSubmit }) {
-  return (
-    <div>
-      <h4 className="text-lg font-semibold">Your recommended match</h4>
-      <p className="text-slate-600 mt-1 text-sm">
-        Hybrid match = fit to your preferences plus alignment with each strategy’s historical behavior.
-      </p>
-
-      {/* Primary (always visible) */}
-      <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <div className="text-xs uppercase tracking-wide text-slate-500">Primary recommendation</div>
-            <div className="text-neutral-700 text-xs uppercase tracking-wide mt-1">{primary.badge}</div>
-            <div className="text-xl font-semibold mt-1">{primary.name}</div>
-          </div>
-          <div className="text-sm text-slate-600">Score {Math.round(primary.score)}</div>
-        </div>
-
-        {/* Advanced reminder style B: small note under name (only when present) */}
-        {primary.advancedNote && (
-          <div className="mt-2 text-xs text-slate-500">{primary.advancedNote}</div>
-        )}
-
-        <p className="text-sm text-slate-600 mt-3">{primary.desc}</p>
-
-        <ul className="mt-3 text-sm text-slate-700 list-disc list-inside space-y-1">
-          {primary.highlights.map((h, i) => (
-            <li key={i}>{h}</li>
-          ))}
-        </ul>
-
-        <div className="mt-5 flex flex-wrap gap-3">
-          <a
-            href={primary.url}
-            className="px-5 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white text-sm font-semibold"
-          >
-            View Strategy
-          </a>
-          <a
-            href="#finder"
-            className="px-5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm font-semibold"
-          >
-            Retake Quiz
-          </a>
-        </div>
-      </div>
-
-      {/* Soft gate */}
-      {!emailCaptured ? (
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-          <h5 className="text-base font-semibold">Want a secondary recommendation?</h5>
-          <p className="text-slate-600 text-sm mt-1">
-            Enter your email to unlock your backup match + a short setup checklist for your style.
-          </p>
-
-          <form onSubmit={onSubmit} className="mt-4 flex flex-col sm:flex-row gap-3">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@company.com"
-              className="flex-1 px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-neutral-800"
-              required
-            />
-            <button className="px-5 py-3 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">
-              Reveal My Secondary Match
-            </button>
-          </form>
-
-          <p className="text-xs text-slate-500 mt-2">
-            We’ll also send setup tips. Unsubscribe anytime.
-          </p>
-        </div>
-      ) : (
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="text-xs uppercase tracking-wide text-slate-500">Secondary recommendation</div>
-              <div className="text-neutral-700 text-xs uppercase tracking-wide mt-1">{secondary.badge}</div>
-              <div className="text-xl font-semibold mt-1">{secondary.name}</div>
-              {secondary.advancedNote && <div className="mt-2 text-xs text-slate-500">{secondary.advancedNote}</div>}
-            </div>
-            <div className="text-sm text-slate-600">Score {Math.round(secondary.score)}</div>
-          </div>
-
-          <p className="text-sm text-slate-600 mt-3">{secondary.desc}</p>
-
-          <ul className="mt-3 text-sm text-slate-700 list-disc list-inside space-y-1">
-            {secondary.highlights.map((h, i) => (
-              <li key={i}>{h}</li>
-            ))}
-          </ul>
-
-          <div className="mt-5">
-            <a
-              href={secondary.url}
-              className="px-5 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white text-sm font-semibold"
-            >
-              View Strategy
-            </a>
-          </div>
-
-          <div className="mt-6 text-xs text-slate-500">
-            <span className="font-semibold text-slate-700">Your inputs:</span>{" "}
-            {Object.entries(answers)
-              .map(([k, v]) => `${k}=${v}`)
-              .join(" • ")}
-          </div>
-
-          <div className="mt-3 text-[11px] text-slate-500">
-            Note: Trading involves risk. Matches are informational and based on preferences + historical behavior characteristics,
-            not guarantees of results.
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function BrowseAllCTA() {
-  return (
-    <div className="mt-8 mb-20">
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm text-center">
-        <h4 className="text-xl font-semibold">Prefer to browse instead?</h4>
-        <p className="text-slate-600 mt-2">
-          Skip the quiz and explore all available Uptiq strategies in the shop.
+      {/* Skip Quiz CTA */}
+      <div className="mt-6 rounded-3xl border border-slate-200 bg-white p-6 md:p-7 text-center">
+        <div className="text-lg font-semibold">Want to skip the quiz?</div>
+        <p className="text-slate-600 mt-1">
+          Browse all available Uptiq strategies and choose what fits your style.
         </p>
-        <div className="mt-5">
+        <div className="mt-4">
           <a
             href="https://uptiq.io/shop/"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-2xl bg-black hover:bg-neutral-800 text-white font-semibold"
+            className="inline-flex px-5 py-3 rounded-2xl bg-black hover:bg-neutral-800 text-white font-semibold"
           >
             View All Strategies
           </a>
         </div>
       </div>
+    </section>
+  );
+}
+
+function EmailGate({ email, setEmail, onSubmit }) {
+  return (
+    <div className="max-w-lg mx-auto text-center">
+      <h4 className="text-xl font-semibold">See your best matches</h4>
+      <p className="text-slate-600 mt-2">
+        Enter your email to view your personalized algorithm recommendations.
+      </p>
+      <form onSubmit={onSubmit} className="mt-5 flex flex-col sm:flex-row gap-3">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@company.com"
+          className="flex-1 px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-neutral-800"
+          required
+        />
+        <button className="px-5 py-3 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">
+          Show My Matches
+        </button>
+      </form>
+      <p className="text-xs text-slate-500 mt-2">
+        We’ll also send setup tips for your match. Unsubscribe anytime.
+      </p>
     </div>
   );
 }
 
-/* ---------------- Sections ---------------- */
+function ResultPanel({ primary, secondary, submitError }) {
+  return (
+    <div>
+      <h4 className="text-lg font-semibold">Your recommended matches</h4>
+      <p className="text-slate-600 mt-1 text-sm">
+        One primary + one secondary (recommended). SpreadLock Alpha may require more experience.
+      </p>
+
+      {submitError ? (
+        <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <div className="font-semibold">Lead capture warning</div>
+          <div className="mt-1">
+            We showed your results, but the email may not have saved successfully:
+            <span className="font-mono"> {submitError}</span>
+          </div>
+          <div className="mt-2 text-red-700">
+            If you’re using FluentCRM: ensure the form is created in <b>FluentCRM</b> (not Fluent Forms) and set
+            <span className="font-mono"> FLUENTCRM_FORM_ID</span>. If you’re using webhook mode: set
+            <span className="font-mono"> WEBHOOK_URL</span>.
+          </div>
+        </div>
+      ) : null}
+
+      <div className="mt-5 grid gap-4 md:grid-cols-2">
+        {primary ? (
+          <AlgoCard
+            title="Primary Match"
+            algo={primary}
+            note={primary.key === "spreadlock-alpha" ? "Advanced-level strategy. Best for experienced traders comfortable with statistical systems." : ""}
+          />
+        ) : null}
+
+        {secondary ? <AlgoCard title="Secondary Match" algo={secondary} /> : null}
+      </div>
+    </div>
+  );
+}
+
+function AlgoCard({ title, algo, note }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="text-xs uppercase tracking-wide text-neutral-600">{title}</div>
+      <div className="mt-1 text-xl font-semibold">{algo.name}</div>
+      <p className="mt-2 text-slate-600 text-sm">{algo.desc}</p>
+
+      {note ? (
+        <div className="mt-3 text-sm rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-700">
+          {note}
+        </div>
+      ) : null}
+
+      <div className="mt-4">
+        <a
+          href={algo.url}
+          className="inline-flex px-4 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white text-sm font-semibold"
+        >
+          View Strategy
+        </a>
+      </div>
+    </div>
+  );
+}
 
 function HowItWorks() {
   return (
@@ -505,9 +497,9 @@ function HowItWorks() {
       <SectionTitle eyebrow="What to expect" title="From quiz → to match → to live in minutes" />
       <div className="grid md:grid-cols-3 gap-4">
         {[
-          { t: "Take the 60-second quiz", d: "We learn your goals, skill level and risk preferences." },
-          { t: "Get a data-driven match", d: "We narrow down the strategies aligned to your inputs with transparent logic." },
-          { t: "Launch with controls", d: "Use presets or fine-tune risk. Have control over your accounts — no coding required." },
+          { t: "Take the 60-second quiz", d: "We learn your goals, skill level, and risk tolerance." },
+          { t: "Get a data-driven match", d: "We narrow down strategies aligned to your inputs with transparent logic." },
+          { t: "Launch with controls", d: "Use presets or fine-tune risk. Have control over your accounts — no coding required." }
         ].map((x, i) => (
           <div key={i} className="rounded-2xl p-5 border border-slate-200 bg-white shadow-sm">
             <div className="text-neutral-700 text-xs uppercase tracking-wider">Step {i + 1}</div>
@@ -527,7 +519,7 @@ function Benefits() {
     { icon: CodeIcon, t: "No coding", d: "Install, confirm parameters, connect, and go." },
     { icon: MonitorIcon, t: "MetaTrader 5", d: "Our strategies are currently for MT5 with other platforms coming soon." },
     { icon: LifeBuoyIcon, t: "Support, 7 days", d: "We’re here to help you go from demo to live with confidence." },
-    { icon: TagIcon, t: "Fair pricing", d: "No profit-sharing. Straightforward licensing fee." },
+    { icon: TagIcon, t: "Fair pricing", d: "No profit-sharing. Straightforward licensing fee." }
   ];
 
   return (
@@ -616,20 +608,20 @@ function FAQ() {
   const qs = [
     {
       q: "How does the matching work?",
-      a: "We score each algorithm across risk profile, trade frequency, holding style, and experience fit. The top recommendations are shown — you can still explore all strategies.",
+      a: "We score each algorithm across risk mindset, frequency preferences, skill level, and strategy priorities. The top matches are shown — you can still explore all strategies."
     },
     {
       q: "Can I change risk settings?",
-      a: "Yes. Adjust position size, max risk %, ATR-based stops, trade sessions, and more.",
+      a: "Yes. Adjust position size, max risk %, stop-loss and take-profit behavior, session filters, and more."
     },
     {
       q: "Do I need coding skills?",
-      a: "No. Installation is made simple as copy & paste and support is available 7 days a week.",
+      a: "No. Installation is made simple as copy & paste and support is available 7 days a week."
     },
     {
       q: "Can I run multiple strategies?",
-      a: "Yes. Many traders use multiple strategies across different assets or behaviors to diversify.",
-    },
+      a: "Yes. Many traders use multiple strategies across different pairs and conditions to diversify execution."
+    }
   ];
 
   return (
@@ -652,12 +644,10 @@ function Footer() {
     <footer className="border-t border-slate-200 py-10">
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="text-slate-600 text-sm">© {new Date().getFullYear()} Uptiq. All rights reserved.</div>
-
         <div className="text-xs text-slate-500">
-          Trading involves risks. Past performance does not guarantee future results. No guarantee of profits. Algorithms are
-          designed as automation tools.
+          Trading involves risks. Past performance does not guarantee future results. No guarantee of profits. Algorithms
+          are designed as automation tools.
         </div>
-
         <div className="flex items-center gap-4 text-sm">
           <a href="mailto:hello@uptiq.io" className="hover:underline">
             Contact
@@ -674,145 +664,78 @@ function Footer() {
   );
 }
 
-/* ---------------- Hybrid Matching Logic (4 strategies only) ---------------- */
+/* ---------- Strategies + Matching Logic ---------- */
 
 const ALGORITHMS = [
   {
-    key: "flowguard",
+    key: "flowguard-momentum",
     name: "FlowGuard Momentum",
-    badge: "Momentum • MT5 • M15",
     url: "https://uptiq.io/product/flowguard-momentum-algo/",
-    desc: "Selective momentum re-entry aligned with trend. Built for disciplined execution with strong filters.",
-    highlights: [
-      "Low frequency / highly selective (10 trades YTD in backtest)",
-      "Designed for clarity: fewer signals, more structure",
-      "Defined SL/TP, optional trailing, time/spread filters",
-    ],
-    profile: {
-      experienceFit: ["new", "some"],
-      frequency: "low",
-      holding: ["minutes", "hours"],
+    desc: "Selective momentum strategy that waits for momentum to realign with the prevailing trend before executing. Designed for disciplined, rules-based execution.",
+    traits: {
+      experience: ["new", "some"],
+      frequency: ["low"],
+      holding: ["hours"],
       riskMindset: ["protect", "clarity"],
-      priority: ["clarity"],
-      performanceTilt: { drawdown: "low", payoff: "higherPerTrade", tradeCount: "veryLow" },
-    },
+      priority: ["clarity"]
+    }
   },
   {
-    key: "spreadlock",
+    key: "spreadlock-alpha",
     name: "SpreadLock Alpha",
-    badge: "Market-Neutral • MT5 • M5",
     url: "https://uptiq.io/product/spreadlock-alpha/",
-    desc: "Pairs/relationship trading built around statistical divergence and normalization — not market direction.",
-    highlights: [
-      "High frequency (2,472 trades YTD in backtest)",
-      "Market-neutral behavior via balanced long/short positions",
-      "Best for traders comfortable with repetition and probability",
-    ],
-    advancedNote: "Advanced strategy: best for experienced users comfortable with statistics and high trade frequency.",
-    profile: {
-      experienceFit: ["advanced"],
-      frequency: "high",
-      holding: ["minutes"],
+    desc: "Quantitative market-neutral pairs strategy. Trades relationships between instruments with frequent repetition. Best for advanced users comfortable with statistical systems and streaks.",
+    traits: {
+      experience: ["advanced"],
+      frequency: ["high"],
+      holding: ["minutes", "hours"],
       riskMindset: ["stat"],
-      priority: ["probability"],
-      performanceTilt: { drawdown: "low", payoff: "smallPerTrade", tradeCount: "veryHigh" },
-    },
+      priority: ["probability"]
+    }
   },
   {
     key: "trendspring",
     name: "TrendSpring",
-    badge: "Trend • MT5 • H1",
     url: "https://uptiq.io/product/trendspring/",
-    desc: "Payoff-focused trend participation: controlled losses with the goal of materially larger winners.",
-    highlights: [
-      "Moderate-low frequency (20 trades YTD in backtest)",
-      "Lower win-rate by design; payoff-focused profile",
-      "Session/spread filters with defined risk parameters",
-    ],
-    profile: {
-      experienceFit: ["new", "some"],
-      frequency: "low",
-      holding: ["hours", "multi"],
+    desc: "Payoff-focused momentum + trend framework. Accepts short losing sequences while aiming for materially larger winners when markets follow through.",
+    traits: {
+      experience: ["new", "some"],
+      frequency: ["low", "medium"],
+      holding: ["multi"],
       riskMindset: ["payoff"],
-      priority: ["repeatable"],
-      performanceTilt: { drawdown: "lowToMod", payoff: "largeWinners", tradeCount: "low" },
-    },
+      priority: ["clarity", "repeatable"]
+    }
   },
   {
-    key: "voltiband",
+    key: "voltiband-trend",
     name: "VoltiBand Trend",
-    badge: "Volatility-MeanReversion • MT5 • M5",
     url: "https://uptiq.io/product/voltiband-trend/",
-    desc: "Volatility-aware mean reversion with trend context. ATR-based exits help adapt to changing conditions.",
-    highlights: [
-      "Moderate frequency (66 trades YTD in backtest)",
-      "ATR-based SL/TP (volatility-aware risk control)",
-      "Optional volatility regime filter for selectivity",
-    ],
-    profile: {
-      experienceFit: ["some", "advanced"],
-      frequency: "medium",
+    desc: "Volatility-aware mean-reversion within trend structure, using ATR-based exits and optional volatility regime filtering. Tunable selectivity for disciplined traders.",
+    traits: {
+      experience: ["some", "advanced"],
+      frequency: ["medium"],
       holding: ["minutes", "hours"],
-      riskMindset: ["protect", "stat"],
-      priority: ["repeatable"],
-      performanceTilt: { drawdown: "veryLow", payoff: "moderate", tradeCount: "medium" },
-    },
-  },
+      riskMindset: ["protect", "payoff"],
+      priority: ["repeatable"]
+    }
+  }
 ];
 
-function matchAlgosHybrid(answers) {
-  // Hybrid weights: fit first, then a light performance tilt (behavioral backtest characteristics)
-  const w = {
-    experience: 2.2,
-    frequency: 2.4,
-    holding: 2.0,
-    riskMindset: 2.0,
-    priority: 2.2,
-    performanceTilt: 1.0, // deliberately modest
-  };
+function matchAlgos(answers) {
+  const w = { experience: 2.0, frequency: 2.0, holding: 1.4, riskMindset: 1.6, priority: 1.6 };
 
-  const scoreAlgo = (algo) => {
+  return ALGORITHMS.map((algo) => {
     let score = 0;
 
-    // Experience fit
-    if (answers.experience && algo.profile.experienceFit.includes(answers.experience)) score += 10 * w.experience;
+    if (answers.experience && algo.traits.experience.includes(answers.experience)) score += 10 * w.experience;
+    if (answers.frequency && algo.traits.frequency.includes(answers.frequency)) score += 10 * w.frequency;
+    if (answers.holding && algo.traits.holding.includes(answers.holding)) score += 8 * w.holding;
+    if (answers.riskMindset && algo.traits.riskMindset.includes(answers.riskMindset)) score += 9 * w.riskMindset;
+    if (answers.priority && algo.traits.priority.includes(answers.priority)) score += 9 * w.priority;
 
-    // Frequency fit
-    if (answers.frequency && algo.profile.frequency === answers.frequency) score += 10 * w.frequency;
+    // Soft preference: if user is NOT advanced, slightly reduce SpreadLock as a primary match
+    if (algo.key === "spreadlock-alpha" && answers.experience !== "advanced") score -= 6;
 
-    // Holding fit
-    if (answers.holding && algo.profile.holding.includes(answers.holding)) score += 10 * w.holding;
-
-    // Risk mindset fit
-    if (answers.riskMindset && algo.profile.riskMindset.includes(answers.riskMindset)) score += 10 * w.riskMindset;
-
-    // Priority fit
-    if (answers.priority && algo.profile.priority.includes(answers.priority)) score += 10 * w.priority;
-
-    // Light performance tilt (no promises; just aligning expectations)
-    // - If user chooses "protect", prefer lower drawdown profiles slightly
-    if (answers.riskMindset === "protect") {
-      if (algo.profile.performanceTilt.drawdown === "veryLow") score += 6 * w.performanceTilt;
-      if (algo.profile.performanceTilt.drawdown === "low") score += 4 * w.performanceTilt;
-    }
-
-    // - If user chooses "payoff", prefer "largeWinners/higherPerTrade"
-    if (answers.riskMindset === "payoff") {
-      if (algo.profile.performanceTilt.payoff === "largeWinners") score += 6 * w.performanceTilt;
-      if (algo.profile.performanceTilt.payoff === "higherPerTrade") score += 4 * w.performanceTilt;
-    }
-
-    // - If user chooses "stat", prefer trade-count profiles with repetition
-    if (answers.riskMindset === "stat") {
-      if (algo.profile.performanceTilt.tradeCount === "veryHigh") score += 6 * w.performanceTilt;
-      if (algo.profile.performanceTilt.tradeCount === "medium") score += 3 * w.performanceTilt;
-    }
-
-    // Small nudge: if user is "new", lightly discourage SpreadLock unless explicitly advanced
-    if (answers.experience === "new" && algo.key === "spreadlock") score -= 10;
-
-    return score;
-  };
-
-  return ALGORITHMS.map((a) => ({ ...a, score: scoreAlgo(a) })).sort((a, b) => b.score - a.score);
+    return { ...algo, score };
+  }).sort((a, b) => b.score - a.score);
 }
