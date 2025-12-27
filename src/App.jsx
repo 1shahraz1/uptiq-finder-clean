@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 /**
  * LEAD CAPTURE CONFIG
@@ -26,7 +26,26 @@ const FLUENTCRM_SUBMIT_URL =
 // If CAPTURE_MODE === "webhook"
 const WEBHOOK_URL = "https://hook.us2.make.com/6gn9xzbvgrn00uinnvwtuweh3yg1mzp3";
 
+// Brand color (matched from your screenshot)
+const UPTIQ_BLUE = "#044FE7";
+
 export default function App() {
+  // Favicon: best practice is to set in index.html,
+  // but this runtime approach will still work as long as /public/favicon.png exists.
+  useEffect(() => {
+    const href = "/favicon.png"; // Put your favicon image into /public/favicon.png
+    let link =
+      document.querySelector("link[rel='icon']") ||
+      document.querySelector("link[rel='shortcut icon']");
+
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "icon";
+      document.head.appendChild(link);
+    }
+    link.href = href;
+  }, []);
+
   return (
     <div className="min-h-screen bg-white text-slate-900">
       <Header />
@@ -93,14 +112,17 @@ function Hero() {
       <div className="max-w-6xl mx-auto px-4 py-16 md:py-20 relative">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <p className="uppercase tracking-wider text-neutral-600 text-xs mb-3">
+            <p
+              className="uppercase tracking-wider text-xs mb-3"
+              style={{ color: UPTIQ_BLUE }}
+            >
               Algorithms made simple
             </p>
             <h1 className="text-4xl md:text-5xl font-bold leading-tight">
               Pick the right trading algorithm in under a minute!
             </h1>
             <p className="mt-4 text-slate-600 text-lg">
-              Uptiq give you the tools to automate your trading through our customizable strategies.
+              Uptiq gives you the tools to automate your trading through our customizable strategies.
               Take the quiz and see what your style of algorithm is based on your goals, risk, and skill level.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -118,7 +140,7 @@ function Hero() {
               </a>
             </div>
             <p className="mt-3 text-xs text-slate-500">
-              No hidden fees or charges • No coding needed • 30 day money back guarantee
+              No hidden fees or charges • No coding needed • 14-day money-back guarantee
             </p>
           </div>
 
@@ -131,19 +153,22 @@ function Hero() {
                   className="w-full h-full object-cover"
                 />
               </div>
+
+              {/* Center text in the 4 boxes */}
               <ul className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-700">
-                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">
-                  MetaTrader 5 Strategies
-                </li>
-                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">
-                  NinjaTrader + IBKR coming soon!
-                </li>
-                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">
-                  Risk controls built-in
-                </li>
-                <li className="p-3 rounded-xl border border-slate-200 bg-slate-50">
-                  Transparent performance
-                </li>
+                {[
+                  "MetaTrader 5 Strategies",
+                  "NinjaTrader + IBKR coming soon!",
+                  "Risk controls built-in",
+                  "Transparent performance"
+                ].map((t) => (
+                  <li
+                    key={t}
+                    className="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center text-center min-h-[52px]"
+                  >
+                    {t}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -158,7 +183,7 @@ function TrustBar() {
     <div className="border-y border-slate-200 bg-white">
       <div className="max-w-6xl mx-auto px-4 py-4 text-xs md:text-sm text-slate-600 flex flex-wrap items-center gap-4 justify-between">
         <div>• Built by real traders • Full automation • Your control</div>
-        <div>• Money back guarantee • No profit sharing • No hidden fees</div>
+        <div>• 14-day guarantee • No profit sharing • No hidden fees</div>
         <div>• Secure licensing • Simple setup • No coding</div>
       </div>
     </div>
@@ -169,7 +194,12 @@ function SectionTitle({ eyebrow, title, subtitle }) {
   return (
     <div className="text-center max-w-3xl mx-auto mt-16 mb-8">
       {eyebrow && (
-        <div className="text-neutral-600 text-xs uppercase tracking-wider mb-2">{eyebrow}</div>
+        <div
+          className="text-xs uppercase tracking-wider mb-2"
+          style={{ color: UPTIQ_BLUE }}
+        >
+          {eyebrow}
+        </div>
       )}
       <h2 className="text-2xl md:text-3xl font-bold">{title}</h2>
       {subtitle && <p className="mt-2 text-slate-600">{subtitle}</p>}
@@ -260,12 +290,10 @@ function FinderCard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
-      // Some webhooks return 200/204 with empty body; just require OK.
       if (!res.ok) throw new Error(`Webhook error: ${res.status}`);
       return;
     }
 
-    // FluentCRM mode
     if (!FLUENTCRM_SUBMIT_URL) {
       throw new Error("FLUENTCRM_FORM_ID is not set. Create the form in FluentCRM (not Fluent Forms) and set the ID.");
     }
@@ -275,14 +303,10 @@ function FinderCard() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: payload.email,
-        // FluentCRM supports additional fields if your form has them;
-        // we store everything else as meta for later workflows.
         meta: payload.meta
       })
     });
 
-    // If CORS blocks reading the response, the request may still have been sent.
-    // We treat non-ok as failure only if we can read it.
     if (!res.ok) throw new Error(`FluentCRM submit failed: ${res.status}`);
   }
 
@@ -307,7 +331,6 @@ function FinderCard() {
         secondary_name: secondary?.name,
         primary_url: primary?.url,
         secondary_url: secondary?.url,
-        // tags can be used in Make/Zapier or your WP automation layer
         tags: [
           "algo-finder",
           primary?.key ? `match-${primary.key}` : null,
@@ -375,14 +398,19 @@ function FinderCard() {
               </button>
             </div>
           </div>
-        ) : !emailCaptured ? (
-          <EmailGate email={email} setEmail={setEmail} onSubmit={handleEmailSubmit} />
         ) : (
-          <ResultPanel primary={primary} secondary={secondary} submitError={submitError} />
+          <ResultsWithEmailUnlock
+            primary={primary}
+            secondary={secondary}
+            email={email}
+            setEmail={setEmail}
+            emailCaptured={emailCaptured}
+            onSubmit={handleEmailSubmit}
+            submitError={submitError}
+          />
         )}
       </div>
 
-      {/* Skip Quiz CTA */}
       <div className="mt-6 rounded-3xl border border-slate-200 bg-white p-6 md:p-7 text-center">
         <div className="text-lg font-semibold">Want to skip the quiz?</div>
         <p className="text-slate-600 mt-1">
@@ -401,67 +429,99 @@ function FinderCard() {
   );
 }
 
-function EmailGate({ email, setEmail, onSubmit }) {
-  return (
-    <div className="max-w-lg mx-auto text-center">
-      <h4 className="text-xl font-semibold">See your best matches</h4>
-      <p className="text-slate-600 mt-2">
-        Enter your email to view your personalized algorithm recommendations.
-      </p>
-      <form onSubmit={onSubmit} className="mt-5 flex flex-col sm:flex-row gap-3">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@company.com"
-          className="flex-1 px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-neutral-800"
-          required
-        />
-        <button className="px-5 py-3 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">
-          Show My Matches
-        </button>
-      </form>
-      <p className="text-xs text-slate-500 mt-2">
-        We’ll also send setup tips for your match. Unsubscribe anytime.
-      </p>
-    </div>
-  );
-}
-
-function ResultPanel({ primary, secondary, submitError }) {
+function ResultsWithEmailUnlock({
+  primary,
+  secondary,
+  email,
+  setEmail,
+  emailCaptured,
+  onSubmit,
+  submitError
+}) {
   return (
     <div>
-      <h4 className="text-lg font-semibold">Your recommended matches</h4>
+      <h4 className="text-lg font-semibold">Your recommended match</h4>
       <p className="text-slate-600 mt-1 text-sm">
-        One primary + one secondary (recommended). SpreadLock Alpha may require more experience.
+        Here’s your best match based on your quiz answers. Enter your email to unlock a secondary recommendation.
       </p>
-
-      {submitError ? (
-        <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-          <div className="font-semibold">Lead capture warning</div>
-          <div className="mt-1">
-            We showed your results, but the email may not have saved successfully:
-            <span className="font-mono"> {submitError}</span>
-          </div>
-          <div className="mt-2 text-red-700">
-            If you’re using FluentCRM: ensure the form is created in <b>FluentCRM</b> (not Fluent Forms) and set
-            <span className="font-mono"> FLUENTCRM_FORM_ID</span>. If you’re using webhook mode: set
-            <span className="font-mono"> WEBHOOK_URL</span>.
-          </div>
-        </div>
-      ) : null}
 
       <div className="mt-5 grid gap-4 md:grid-cols-2">
         {primary ? (
           <AlgoCard
             title="Primary Match"
             algo={primary}
-            note={primary.key === "spreadlock-alpha" ? "Advanced-level strategy. Best for experienced traders comfortable with statistical systems." : ""}
+            note={
+              primary.key === "spreadlock-alpha"
+                ? "Advanced-level strategy. Best for experienced traders comfortable with statistical systems."
+                : ""
+            }
           />
         ) : null}
 
-        {secondary ? <AlgoCard title="Secondary Match" algo={secondary} /> : null}
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="text-xs uppercase tracking-wide text-neutral-600">Secondary Match</div>
+          {!emailCaptured ? (
+            <div className="mt-2">
+              <div className="text-lg font-semibold">Unlock your secondary match</div>
+              <p className="mt-2 text-slate-600 text-sm">
+                Enter your email to reveal a second strategy that complements your primary match.
+              </p>
+              <EmailGate email={email} setEmail={setEmail} onSubmit={onSubmit} />
+            </div>
+          ) : secondary ? (
+            <div className="mt-2">
+              <div className="text-xl font-semibold">{secondary.name}</div>
+              <p className="mt-2 text-slate-600 text-sm">{secondary.desc}</p>
+              <div className="mt-4">
+                <a
+                  href={secondary.url}
+                  className="inline-flex px-4 py-2 rounded-xl bg-black hover:bg-neutral-800 text-white text-sm font-semibold"
+                >
+                  View Strategy
+                </a>
+              </div>
+
+              {submitError ? (
+                <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                  <div className="font-semibold">Lead capture warning</div>
+                  <div className="mt-1">
+                    Your results are shown, but the email may not have saved successfully:
+                    <span className="font-mono"> {submitError}</span>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div className="mt-2 text-slate-600 text-sm">
+              Thanks — your secondary match is loading. If it doesn’t appear, refresh and re-run the quiz.
+            </div>
+          )}
+        </div>
       </div>
+    </div>
+  );
+}
+
+function EmailGate({ email, setEmail, onSubmit }) {
+  return (
+    <div className="mt-4">
+      <form onSubmit={onSubmit} className="flex flex-col gap-3">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@company.com"
+          className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-neutral-800"
+          required
+        />
+        <button className="w-full px-5 py-3 rounded-xl bg-black hover:bg-neutral-800 text-white font-semibold">
+          Unlock My Second Match
+        </button>
+      </form>
+      <p className="text-xs text-slate-500 mt-2">
+        By submitting your email, you agree to receive Uptiq news and marketing emails, plus setup tips for your match.
+        Unsubscribe anytime.
+      </p>
     </div>
   );
 }
@@ -515,7 +575,7 @@ function HowItWorks() {
 function Benefits() {
   const items = [
     { icon: CheckIcon, t: "Transparent performance", d: "Clear backtests, stats, risk, and assumptions." },
-    { icon: ShieldIcon, t: "30-day guarantee", d: "We’ll be happy to refund your money if you are not satisfied." },
+    { icon: ShieldIcon, t: "14-day guarantee", d: "We’ll be happy to refund your money within 14 days if you’re not satisfied." },
     { icon: CodeIcon, t: "No coding", d: "Install, confirm parameters, connect, and go." },
     { icon: MonitorIcon, t: "MetaTrader 5", d: "Our strategies are currently for MT5 with other platforms coming soon." },
     { icon: LifeBuoyIcon, t: "Support, 7 days", d: "We’re here to help you go from demo to live with confidence." },
@@ -649,7 +709,7 @@ function Footer() {
           are designed as automation tools.
         </div>
         <div className="flex items-center gap-4 text-sm">
-          <a href="mailto:hello@uptiq.io" className="hover:underline">
+          <a href="https://uptiq.io/contact-us/" className="hover:underline">
             Contact
           </a>
           <a href="https://uptiq.io/privacy" className="hover:underline">
