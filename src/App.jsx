@@ -643,7 +643,7 @@ function Footer() {
   return (
     <footer className="border-t border-slate-200 py-10">
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="text-slate-600 text-sm">© {new Date().getFullYear()} Uptiq. All rights reserved.</div>
+        <div className="text-slate-600 text-sm">© {new Date().getFullYear()} NASF LLC. All rights reserved.</div>
         <div className="text-xs text-slate-500">
           Trading involves risks. Past performance does not guarantee future results. No guarantee of profits. Algorithms
           are designed as automation tools.
